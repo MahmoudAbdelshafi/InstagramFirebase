@@ -19,6 +19,7 @@ class PhotoSelectorController: UICollectionViewController {
     var images = [UIImage]()
     var selectedImage:UIImage?
     var assets = [PHAsset]()
+    var header:PhotoSelectorHeader?
     
   
     
@@ -55,7 +56,7 @@ extension PhotoSelectorController{
         let allPhotos = PHAsset.fetchAssets(with:.image , options: fetchOptions)
         allPhotos.enumerateObjects { (asset, count, stop) in
             let imageManager = PHImageManager.default()
-            let targetSize = CGSize(width: 50, height: 50)
+            let targetSize = CGSize(width: 10, height: 10)
             let options = PHImageRequestOptions()
             let sortDiscriptors = NSSortDescriptor(key: "creationDate", ascending: false)
             fetchOptions.sortDescriptors = [sortDiscriptors]
@@ -64,19 +65,21 @@ extension PhotoSelectorController{
                 if let image = image {
                     self.images.append(image)
                     self.assets.append(asset)
-                     
+                    if self.selectedImage == nil {
+                        self.selectedImage = image
+                    }
                 }
-              
                 if count == allPhotos.count - 1 {
                     DispatchQueue.main.async {
                         self.collectionView.reloadData()
                     }
                 }
             }
-            
         }
         }
     }
+    
+    
     
     fileprivate func registerCells(){
         self.collectionView!.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: "cellId")
@@ -87,14 +90,15 @@ extension PhotoSelectorController{
         navigationController?.navigationBar.tintColor = .black
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handelCancel))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handelNext))
-        
     }
+    
     
     @objc fileprivate func handelCancel(){
         dismiss(animated: true, completion: nil)
     }
     
-    @objc fileprivate func handelNext(){
+    @objc func handelNext(){
+        SharePhotoController.selectedImage = header?.HeaderPhotoImage.image
         navigationController?.pushViewController(SharePhotoController(), animated: true)
     }
 }
@@ -150,6 +154,7 @@ extension PhotoSelectorController{
 extension PhotoSelectorController{
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as! PhotoSelectorHeader
+        self.header = cell
         let imageManger = PHImageManager.default()
         if let selectedImage = selectedImage {
             if let index = self.images.firstIndex(of:selectedImage){
@@ -157,17 +162,13 @@ extension PhotoSelectorController{
                 let targetSize = CGSize(width: 600, height: 600)
                 imageManger.requestImage(for: selectedAsset, targetSize: targetSize, contentMode: .default, options: nil) { (image, info) in
                     cell.HeaderPhotoImage.image = image
-                    DispatchQueue.main.async {
-                    collectionView.reloadData()
-                    }
+                    
                 }
             }
         }
-        if selectedImage != nil {
-        cell.HeaderPhotoImage.image = selectedImage
-        }else{
-            cell.HeaderPhotoImage.image = images.first
-        }
+    
+        
+        
         return cell
     }
     

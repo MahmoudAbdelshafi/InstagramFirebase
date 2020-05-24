@@ -23,12 +23,19 @@ class UserProfileController: UIViewController {
     
     
     //MARK:- properties
+    var imagesData:UIImage?
     var image:UIImage?
     var username:String?
+    var posts = [Post](){
+        didSet {
+            //userCollectionView.reloadData()
+        }
+    }
     
     
     
     
+   
     
     //MARK:- IBOutlets
     @IBOutlet weak var userCollectionView: UICollectionView!
@@ -38,9 +45,10 @@ class UserProfileController: UIViewController {
         super.viewDidLoad()
         setupProfileImage()
         
+        fetchOrderdPosts()
         
     }
-   
+    
     
     //MARK:- IBActions
     @IBAction func logOutPressed(_ sender: Any) {
@@ -55,42 +63,57 @@ class UserProfileController: UIViewController {
 
 //MARK:- Private Functions
 extension UserProfileController{
+   
+     //Get posts
+    fileprivate func fetchOrderdPosts(){
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let ref = Database.database().reference().child("posts").child(uid)
+        ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
+            guard let dictionary = snapshot.value as? [String:Any] else {return}
+            let post = Post(dictionary: dictionary)
+            self.posts.append(post)
+           // self.userCollectionView.reloadData()
+        }) { (error) in
+            print("failled to get posts",error)
+        }
+    }
     
- 
+
     //Logout Alert
     fileprivate func handelLogOut(){
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { (_) in
             do{
-               try Auth.auth().signOut()
-                 
+                try Auth.auth().signOut()
+                
                 self.presentLogInController()
             }catch{
                 print("Error SignOut")
             }
-            
         }))
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
         }))
         present(alertController, animated: true, completion: nil)
     }
     
+    
+    
     //present LogIn Controller
     fileprivate func presentLogInController(){
         let loginController = storyboard?.instantiateViewController(withIdentifier: "logInController") as! LoginController
-                   let nav = UINavigationController()
-                   nav.show(loginController, sender: self)
-                   nav.modalPresentationStyle = .fullScreen
-                   DispatchQueue.main.async {
-                   self.present(nav, animated: true)
-                   }
+        let nav = UINavigationController()
+        nav.show(loginController, sender: self)
+        nav.modalPresentationStyle = .fullScreen
+        DispatchQueue.main.async {
+            self.present(nav, animated: true)
+        }
     }
     
     
     
     
     
-    //get profile image
+    //get profile image with the StringUrl
     fileprivate func setupProfileImage(){
         fetchUser { (urlString) in
             let url = URL(string: urlString!)
@@ -111,8 +134,8 @@ extension UserProfileController{
     }
     
     
-    //get image URL from data base
-    fileprivate func fetchUser(comletion:@escaping(_ image:String?)->Void){
+    //get profile image URL from data base
+    fileprivate func fetchUser(comletion:@escaping(_ imageUrlString:String?)->Void){
         guard let uid = Auth.auth().currentUser?.uid else {return}
         Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
             guard let dictionary = snapshot.value as? [String:Any] else {return}
@@ -138,7 +161,6 @@ extension UserProfileController{
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "UserProfileHeader", for: indexPath) as! UserProfileHeader
-    
         header.userImage.image = image
         header.userLabel.text = username
         return header
@@ -147,7 +169,7 @@ extension UserProfileController{
     
     
     //Header size
-     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let width = view.frame.width
         return CGSize(width: width, height: 200)
     }
@@ -157,15 +179,19 @@ extension UserProfileController{
 
 
 
-//MARK:- User Profile CollectionView Deleget methods
+//MARK:- User Profile CollectionView Datasource methods
 extension UserProfileController : UICollectionViewDataSource,UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 100
+        return posts.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! UserProfileCollectionViewCell
+        let post = posts[indexPath.item].imageUrl
+        cell.userImage.loadImage(urlString: post)
+      
+//        cell.post = posts[indexPath.item]
         return cell
     }
     
@@ -180,6 +206,6 @@ extension UserProfileController : UICollectionViewDataSource,UICollectionViewDel
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-         return 1
+        return 1
     }
 }

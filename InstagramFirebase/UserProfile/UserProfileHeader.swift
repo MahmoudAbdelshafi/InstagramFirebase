@@ -11,7 +11,7 @@ import Firebase
 
 class UserProfileHeader: UICollectionReusableView {
     
-    
+    var numberOfPosts = String()
     
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var postsLabel: UILabel!
@@ -23,8 +23,7 @@ class UserProfileHeader: UICollectionReusableView {
     override func awakeFromNib() {
         setupUI()
     }
-    
-    
+
     
     //MARK:- IBActions
     @IBAction func editProfilePressed(_ sender: Any) {
@@ -48,7 +47,7 @@ extension UserProfileHeader{
     
     //Labels Attributes
     fileprivate func setupTextLabelAttributes(){
-        let attributedText = NSMutableAttributedString(string: "11\n", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
+        let attributedText = NSMutableAttributedString(string: "\(numberOfPosts)", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
         attributedText.append(NSMutableAttributedString(string: "Posts", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),NSAttributedString.Key.foregroundColor : UIColor.lightGray]))
         postsLabel.attributedText = attributedText
         
