@@ -15,12 +15,15 @@ class HomePostCell: UICollectionViewCell {
             
             guard let imageUrl = post?.imageUrl else {return}
             photoImageView.loadImage(urlString: imageUrl)
-            
+            usernameLabel.text = post?.user.username
+            guard let profileImageUrl = post?.user.profileImageUrl else {return}
+            userPhotoImageView.loadImage(urlString: profileImageUrl)
+            setupattributedCaption()
         }
     }
     
     @IBOutlet weak var photoImageView: CustomImageView!
-    @IBOutlet weak var userPhotoImageView: UIImageView!
+    @IBOutlet weak var userPhotoImageView: CustomImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var optionButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
@@ -41,16 +44,22 @@ class HomePostCell: UICollectionViewCell {
 
 //MARK:- Private Functions
 extension HomePostCell{
+    fileprivate func  setupattributedCaption(){
+        guard let post = self.post else {return}
+        
+        let attributedText = NSMutableAttributedString(string: post.user.username, attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
+        attributedText.append(NSMutableAttributedString(string: "  \(post.caption)", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),NSAttributedString.Key.foregroundColor : UIColor.black
+               ]))
+               
+               attributedText.append(NSMutableAttributedString(string: "\n\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 4)]))
+               attributedText.append(NSMutableAttributedString(string: "1 week ago", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),NSAttributedString.Key.foregroundColor : UIColor.gray]))
+               
+               captionLabel.attributedText = attributedText
+    }
+    
     fileprivate func setupUI(){
         photoImageView.clipsToBounds = true
         userPhotoImageView.layer.cornerRadius = 40 / 2
-        let attributedText = NSMutableAttributedString(string: "Username  ", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
-        attributedText.append(NSMutableAttributedString(string: "some caption text for testing the cell stretching  some caption text for testing the cell stretchingsome caption text for testing the cell stretching", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),NSAttributedString.Key.foregroundColor : UIColor.black
-        ]))
-        
-        attributedText.append(NSMutableAttributedString(string: "\n\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 4)]))
-        attributedText.append(NSMutableAttributedString(string: "1 week ago", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),NSAttributedString.Key.foregroundColor : UIColor.gray]))
-        
-        captionLabel.attributedText = attributedText
+       
     }
 }

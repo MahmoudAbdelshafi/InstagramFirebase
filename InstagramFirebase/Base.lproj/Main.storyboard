@@ -134,7 +134,7 @@
         <!--User Profile Controller-->
         <scene sceneID="t7R-Xr-CFB">
             <objects>
-                <viewController id="P77-Bb-ise" customClass="UserProfileController" customModule="InstagramFirebase" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="userProfileController" id="P77-Bb-ise" customClass="UserProfileController" customModule="InstagramFirebase" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="v7d-GI-tES">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -178,7 +178,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="317"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="P8d-3J-YfO">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="P8d-3J-YfO" customClass="CustomImageView" customModule="InstagramFirebase" customModuleProvider="target">
                                             <rect key="frame" x="20" y="20" width="80" height="80"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="80" id="OIZ-21-WW5"/>
@@ -335,21 +335,95 @@
             </objects>
             <point key="canvasLocation" x="-5247" y="-355"/>
         </scene>
-        <!--View Controller-->
+        <!--User Search Controller-->
         <scene sceneID="5ve-0h-pkS">
             <objects>
-                <viewController id="wE3-xS-OY6" sceneMemberID="viewController">
+                <viewController id="wE3-xS-OY6" customClass="UserSearchController" customModule="InstagramFirebase" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="She-Dy-Q8o">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="O7U-GX-MCV">
+                                <rect key="frame" x="0.0" y="44" width="375" height="574"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="NpJ-33-gwp">
+                                    <size key="itemSize" width="375" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="searchCell" id="rjh-f1-ncc" customClass="UserSearchCell" customModule="InstagramFirebase" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="JWn-Gl-tD1">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YuW-wD-al9" customClass="CustomImageView" customModule="InstagramFirebase" customModuleProvider="target">
+                                                    <rect key="frame" x="8" y="39" width="50" height="50"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="50" id="ayb-q7-xG6"/>
+                                                        <constraint firstAttribute="width" constant="50" id="ura-an-gQC"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="l5U-sx-EuF">
+                                                    <rect key="frame" x="66" y="55.5" width="250" height="17"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="250" id="pCG-WN-9yZ"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="maR-ik-8sN">
+                                                    <rect key="frame" x="66" y="127.5" width="309" height="0.5"/>
+                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="0.5" id="3I3-vN-9Nc"/>
+                                                    </constraints>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="maR-ik-8sN" firstAttribute="leading" secondItem="l5U-sx-EuF" secondAttribute="leading" id="8eo-7e-XWB"/>
+                                                <constraint firstItem="YuW-wD-al9" firstAttribute="leading" secondItem="JWn-Gl-tD1" secondAttribute="leading" constant="8" id="9jW-B0-Q77"/>
+                                                <constraint firstItem="YuW-wD-al9" firstAttribute="centerY" secondItem="JWn-Gl-tD1" secondAttribute="centerY" id="Dwu-o0-czL"/>
+                                                <constraint firstItem="l5U-sx-EuF" firstAttribute="leading" secondItem="YuW-wD-al9" secondAttribute="trailing" constant="8" id="SpH-8W-ehe"/>
+                                                <constraint firstAttribute="trailing" secondItem="maR-ik-8sN" secondAttribute="trailing" id="Zys-Qb-O8U"/>
+                                                <constraint firstItem="l5U-sx-EuF" firstAttribute="centerY" secondItem="YuW-wD-al9" secondAttribute="centerY" id="g6n-16-mCF"/>
+                                                <constraint firstAttribute="bottom" secondItem="maR-ik-8sN" secondAttribute="bottom" id="xA5-dS-Mde"/>
+                                            </constraints>
+                                        </collectionViewCellContentView>
+                                        <size key="customSize" width="375" height="128"/>
+                                        <connections>
+                                            <outlet property="profileImageView" destination="YuW-wD-al9" id="Gav-tr-23O"/>
+                                            <outlet property="userNameLabel" destination="l5U-sx-EuF" id="GDT-4E-SQe"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="wE3-xS-OY6" id="AhO-T8-QMi"/>
+                                    <outlet property="delegate" destination="wE3-xS-OY6" id="X0Z-Ql-g7A"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="O7U-GX-MCV" firstAttribute="top" secondItem="Akf-F9-m7O" secondAttribute="top" id="BQC-ZD-AaS"/>
+                            <constraint firstItem="Akf-F9-m7O" firstAttribute="bottom" secondItem="O7U-GX-MCV" secondAttribute="bottom" id="Qxb-Cn-9Mv"/>
+                            <constraint firstItem="O7U-GX-MCV" firstAttribute="leading" secondItem="Akf-F9-m7O" secondAttribute="leading" id="Ues-uB-Kbp"/>
+                            <constraint firstItem="Akf-F9-m7O" firstAttribute="trailing" secondItem="O7U-GX-MCV" secondAttribute="trailing" id="czz-TO-y6P"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Akf-F9-m7O"/>
                     </view>
                     <navigationItem key="navigationItem" id="LlM-o3-6vE"/>
+                    <connections>
+                        <outlet property="searchCollectionView" destination="O7U-GX-MCV" id="il0-hw-pkt"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PB9-hI-dK2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5246" y="-1052"/>
+            <point key="canvasLocation" x="-5247.1999999999998" y="-1052.0239880059971"/>
         </scene>
         <!--Login Controller-->
         <scene sceneID="2Jv-eL-4td">
@@ -559,9 +633,9 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jRF-hb-F0i" customClass="CustomImageView" customModule="InstagramFirebase" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="56" width="375" height="307"/>
                                                 </imageView>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VYI-K7-PiT">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VYI-K7-PiT" customClass="CustomImageView" customModule="InstagramFirebase" customModuleProvider="target">
                                                     <rect key="frame" x="8" y="8" width="40" height="40"/>
-                                                    <color key="backgroundColor" red="1" green="0.0" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="MPZ-fi-iKC"/>
                                                         <constraint firstAttribute="width" constant="40" id="Ynn-Cn-DWb"/>
@@ -583,19 +657,19 @@
                                                     </constraints>
                                                     <state key="normal" title="•••"/>
                                                 </button>
-                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="JS0-82-Jn7">
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="JS0-82-Jn7">
                                                     <rect key="frame" x="8" y="363" width="150" height="50"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q8N-zI-wr4">
-                                                            <rect key="frame" x="0.0" y="0.0" width="38" height="50"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="43.5" height="50"/>
                                                             <state key="normal" image="like_unselected"/>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ajN-mF-gwx">
-                                                            <rect key="frame" x="56" y="0.0" width="38" height="50"/>
+                                                            <rect key="frame" x="53.5" y="0.0" width="43" height="50"/>
                                                             <state key="normal" image="comment"/>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EnU-zq-Hbg">
-                                                            <rect key="frame" x="112" y="0.0" width="38" height="50"/>
+                                                            <rect key="frame" x="106.5" y="0.0" width="43.5" height="50"/>
                                                             <state key="normal" image="send2"/>
                                                         </button>
                                                     </subviews>

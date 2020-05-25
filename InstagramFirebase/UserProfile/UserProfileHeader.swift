@@ -10,10 +10,16 @@ import UIKit
 import Firebase
 
 class UserProfileHeader: UICollectionReusableView {
+    var imageURlString:String?{
+        didSet{
+            guard let imageUrl = imageURlString else { return }
+            userImage.loadImage(urlString: imageUrl)
+        }
+    }
     
     var numberOfPosts = String()
     
-    @IBOutlet weak var userImage: UIImageView!
+    @IBOutlet weak var userImage: CustomImageView!
     @IBOutlet weak var postsLabel: UILabel!
     @IBOutlet weak var followersLabel: UILabel!
     @IBOutlet weak var followingLabel: UILabel!

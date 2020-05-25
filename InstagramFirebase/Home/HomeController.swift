@@ -9,6 +9,8 @@
 import UIKit
 import Firebase
 
+
+
 class HomeController: UIViewController {
     
     
@@ -41,14 +43,15 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "homeCell", for: indexPath) as! HomePostCell
-        
+        cell.photoImageView.image = nil
         cell.post = posts[indexPath.item]
-        cell.photoImageView.clipsToBounds = true
         return cell
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: view.frame.height / 2)
+        let height:CGFloat = 186 + view.frame.width
+        return CGSize(width: view.frame.width, height: height)
     }
     
     
@@ -60,17 +63,23 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
 extension HomeController{
     fileprivate func fetchPosts(){
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        let ref = Database.database().reference().child("posts").child(uid)
-        ref.observeSingleEvent(of: .value, with: { (snapshot) in
-        guard let dictionaries = snapshot.value as? [String:Any] else {return}
-         dictionaries.forEach { (key,value) in
-         guard let dictionary = value as? [String: Any] else{ return}
-            let post = Post(dictionary: dictionary)
-            self.posts.append(post)
-            }
-            self.homeCollectionView.reloadData()
-        }) { (err) in
-            print("err",err)
+        Database.fetchUserWithUID(uid: uid, completion: fetchPostsWithUser(_:))
+        
+        
+    }
+    
+    fileprivate func fetchPostsWithUser(_ user:User){
+        let ref = Database.database().reference().child("posts").child(user.uid)
+    ref.observeSingleEvent(of: .value, with: { (snapshot) in
+    guard let dictionaries = snapshot.value as? [String:Any] else {return}
+     dictionaries.forEach { (key,value) in
+     guard let dictionary = value as? [String: Any] else{ return}
+        let post = Post(user: user, dictionary: dictionary)
+        self.posts.append(post)
         }
+        self.homeCollectionView.reloadData()
+    }) { (err) in
+        print("err",err)
+    }
     }
 }

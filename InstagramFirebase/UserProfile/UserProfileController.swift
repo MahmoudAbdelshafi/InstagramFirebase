@@ -11,31 +11,20 @@ import Firebase
 
 class UserProfileController: UIViewController {
     
-    struct User{
-        var username:String
-        var profileImageUrl:String
-        init(dicionary:[String:Any]) {
-            self.username = (dicionary["username"] as! String)
-            self.profileImageUrl = (dicionary["profileImageUrl"] as! String)
-        }
-    }
+    
     
     
     
     //MARK:- properties
     var imagesData:UIImage?
-    var image:UIImage?
-    var username:String?
-    var posts = [Post](){
-        didSet {
-            //userCollectionView.reloadData()
-        }
-    }
+    var userId:String?
+    var user:User?
+    var posts = [Post]()
     
     
     
     
-   
+    
     
     //MARK:- IBOutlets
     @IBOutlet weak var userCollectionView: UICollectionView!
@@ -43,9 +32,11 @@ class UserProfileController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupProfileImage()
         
-        fetchOrderdPosts()
+        fetchUser()
+            
+        
+      
         
     }
     
@@ -63,22 +54,24 @@ class UserProfileController: UIViewController {
 
 //MARK:- Private Functions
 extension UserProfileController{
-   
-     //Get posts
+    
+    //Get posts
     fileprivate func fetchOrderdPosts(){
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let uid = self.user?.uid else { return }
         let ref = Database.database().reference().child("posts").child(uid)
         ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
             guard let dictionary = snapshot.value as? [String:Any] else {return}
-            let post = Post(dictionary: dictionary)
-            self.posts.append(post)
-           // self.userCollectionView.reloadData()
+            let user = User(uid: uid, dicionary: ["username" : "Any"])
+            let post = Post(user: user, dictionary: dictionary)
+            self.posts.insert(post, at: 0)
+            // self.posts.append(post)
+           self.userCollectionView.reloadData()
         }) { (error) in
             print("failled to get posts",error)
         }
     }
     
-
+    
     //Logout Alert
     fileprivate func handelLogOut(){
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -112,41 +105,17 @@ extension UserProfileController{
     
     
     
-    
-    //get profile image with the StringUrl
-    fileprivate func setupProfileImage(){
-        fetchUser { (urlString) in
-            let url = URL(string: urlString!)
-            URLSession.shared.dataTask(with: url!) { (data, response, error) in
-                if error != nil{
-                    print(error!)
-                    return
-                }
-                guard let dataImage = UIImage(data: data!) else {return}
-                DispatchQueue.main.async {
-                    self.image = dataImage
-                    self.userCollectionView.reloadData()
-                }
-                
-            }.resume()
-        }
-        
-    }
+
     
     
     //get profile image URL from data base
-    fileprivate func fetchUser(comletion:@escaping(_ imageUrlString:String?)->Void){
-        guard let uid = Auth.auth().currentUser?.uid else {return}
-        Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
-            guard let dictionary = snapshot.value as? [String:Any] else {return}
-            let user = User(dicionary: dictionary)
+    fileprivate func fetchUser(){
+        let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
+        Database.fetchUserWithUID(uid: uid) { (user) in
+            self.user = user
             self.navigationItem.title = user.username
-            self.username = user.username
-            comletion(user.profileImageUrl)
-        }) { (err) in
-            print("failled to fetch user")
+            self.fetchOrderdPosts()
         }
-        
     }
     
     
@@ -161,8 +130,8 @@ extension UserProfileController{
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "UserProfileHeader", for: indexPath) as! UserProfileHeader
-        header.userImage.image = image
-        header.userLabel.text = username
+        header.imageURlString = user?.profileImageUrl
+        header.userLabel.text = user?.username
         return header
     }
     
@@ -190,8 +159,8 @@ extension UserProfileController : UICollectionViewDataSource,UICollectionViewDel
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! UserProfileCollectionViewCell
         let post = posts[indexPath.item].imageUrl
         cell.userImage.loadImage(urlString: post)
-      
-//        cell.post = posts[indexPath.item]
+        
+        //        cell.post = posts[indexPath.item]
         return cell
     }
     
