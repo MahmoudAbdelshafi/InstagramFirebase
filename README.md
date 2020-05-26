@@ -1,6 +1,6 @@
 # Instagram Clone
-[![Swift Version][swift-image]][swift-url]
-[![Platform](https://img.shields.io/cocoapods/p/LFAlertController.svg?style=flat)](https://www.apple.com/ios/ios-11/)
+![Swift 5.0](https://img.shields.io/badge/swift-5.0-orange.svg?style=flat)](#)[swift-image]][swift-url]
+[![Platform](https://img.shields.io/cocoapods/p/LFAlertController.svg?style=flat)](https://www.apple.com/ios/ios-12/)
 [![Build Status](https://travis-ci.org/dwyl/esta.svg?branch=master)](https://travis-ci.org/dwyl/esta)
 
 An iOS clone of instagram built using Swift 4.2, Firebase, Cocoa Touch and AVFoundation. 
