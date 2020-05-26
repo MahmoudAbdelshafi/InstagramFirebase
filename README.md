@@ -5,7 +5,8 @@
 
 An iOS clone of instagram built using Swift 5, and Firebase. 
 
-|:---:|:---:|
+
+
 ## Features
 
 - [x] Registeration of new users/ Login functionality.
@@ -15,8 +16,8 @@ An iOS clone of instagram built using Swift 5, and Firebase.
 - [x] Follow other users. 
 - [x] Share your thoughts and images with your followers.
 - [x] Take images with your phone camera.
-| 
-|:---:|:---:|
+
+
 
 ## Requirements
 
@@ -24,7 +25,7 @@ An iOS clone of instagram built using Swift 5, and Firebase.
 - Xcode 11
 - Swift 5
 
-|:---:|:---:|
+
 ## Meta
 
 Mahmoud Abdelshafi – mahmoudabdelshafi4@gmail.com
