@@ -15,8 +15,9 @@ An iOS clone of instagram built using Swift 5, and Firebase.
 - [x] Follow other users. 
 - [x] Share your thoughts and images with your followers.
 - [x] Take images with your phone camera.
-
+| 
 |:---:|:---:|
+
 ## Requirements
 
 - iOS 10.0+
