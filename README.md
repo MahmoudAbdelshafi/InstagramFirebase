@@ -3,9 +3,9 @@
 [![Platform](https://img.shields.io/cocoapods/p/LFAlertController.svg?style=flat)](https://www.apple.com/ios/ios-12/)
 [![Build Status](https://travis-ci.org/dwyl/esta.svg?branch=master)](https://travis-ci.org/dwyl/esta)
 
-An iOS clone of instagram built using Swift 4.2, Firebase, Cocoa Touch and AVFoundation. 
+An iOS clone of instagram built using Swift 5, and Firebase. 
 
-
+|:---:|:---:|
 ## Features
 
 - [x] Registeration of new users/ Login functionality.
@@ -15,19 +15,18 @@ An iOS clone of instagram built using Swift 4.2, Firebase, Cocoa Touch and AVFou
 - [x] Follow other users. 
 - [x] Share your thoughts and images with your followers.
 - [x] Take images with your phone camera.
-- [x] Draw on images, add text on images.
 
-
+|:---:|:---:|
 ## Requirements
 
 - iOS 10.0+
-- Xcode 10
-- Swift 4.2
+- Xcode 11
+- Swift 5
 
-
+|:---:|:---:|
 ## Meta
 
-Raghav Bhasin – [@bhasin97](https://github.com/raghavbhasin97) – raghavbhasin97@gmail.com
+Mahmoud Abdelshafi – mahmoudabdelshafi4@gmail.com
 
 
 [swift-image]:https://img.shields.io/badge/swift-5.0-orange.svg?style=flat
