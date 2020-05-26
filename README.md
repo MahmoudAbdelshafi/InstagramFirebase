@@ -22,7 +22,7 @@ An iOS clone of instagram built using Swift 5, and Firebase.
 
 ## Home Feed
 <img src= "images/home_feed.gif" width="250" > 
-![HomeFeed](Images/home_feed.gif) 
+
 
 
 
