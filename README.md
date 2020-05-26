@@ -20,6 +20,10 @@ An iOS clone of instagram built using Swift 5, and Firebase.
 ## Sign Up / Login
 <img src= "images/signIn.png" width="250" >   <img src= "images/signUp.png" width="250" >
 
+## Home Feed
+![HomeFeed](Images/home_feed.gif) 
+
+
 ## Requirements
 
 - iOS 12.0+
