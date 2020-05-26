@@ -18,7 +18,7 @@ An iOS clone of instagram built using Swift 5, and Firebase.
 - [x] Take images with your phone camera.
 
 ## Sign Up / Login
-<img src= "images/signIn.png" width="150" >   <img src= "images/signUp.png" width="150" >
+<img src= "images/signIn.png" width="250" >   <img src= "images/signUp.png" width="250" >
 
 ## Requirements
 
