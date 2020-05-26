@@ -35,6 +35,7 @@ class UserSearchController: UIViewController{
         fetchUsers()
         hideKeyboardWhenTappedAround()
         searchCollectionView.keyboardDismissMode = .onDrag
+    
         
     }
    
@@ -97,6 +98,7 @@ extension UserSearchController{
             self.users.sort { (u1, u2) -> Bool in
                 return u1.username.compare(u2.username) == .orderedAscending
             }
+            self.filterdUsers = self.users
             self.searchCollectionView.reloadData()
             
         }) { (error) in

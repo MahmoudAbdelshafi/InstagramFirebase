@@ -130,7 +130,7 @@ extension UserProfileController{
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "UserProfileHeader", for: indexPath) as! UserProfileHeader
-        header.imageURlString = user?.profileImageUrl
+        header.user = user
         header.userLabel.text = user?.username
         return header
     }

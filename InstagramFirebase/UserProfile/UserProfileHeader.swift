@@ -10,14 +10,18 @@ import UIKit
 import Firebase
 
 class UserProfileHeader: UICollectionReusableView {
-    var imageURlString:String?{
+    
+    //MARK:- Properties
+    var numberOfPosts = String()
+    var user:User?{
         didSet{
-            guard let imageUrl = imageURlString else { return }
+            guard let imageUrl = user?.profileImageUrl else { return }
             userImage.loadImage(urlString: imageUrl)
+            setupEditProfileButton()
         }
     }
     
-    var numberOfPosts = String()
+    
     
     @IBOutlet weak var userImage: CustomImageView!
     @IBOutlet weak var postsLabel: UILabel!
@@ -26,13 +30,16 @@ class UserProfileHeader: UICollectionReusableView {
     @IBOutlet weak var userLabel: UILabel!
     @IBOutlet weak var editProfileButton: UIButton!
     
+   
     override func awakeFromNib() {
         setupUI()
     }
-
+    
     
     //MARK:- IBActions
     @IBAction func editProfilePressed(_ sender: Any) {
+        handelEditProfileOrFollow()
+        
     }
     
 }
@@ -42,6 +49,77 @@ class UserProfileHeader: UICollectionReusableView {
 //MARK:- Private Functions
 
 extension UserProfileHeader{
+    
+    fileprivate func setupEditProfileButton(){
+        guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else {return}
+        guard let userId = user?.uid else {return}
+        if currentLoggedInUserId != userId{
+            Database.database().reference().child("following").child(currentLoggedInUserId).child(userId).observeSingleEvent(of: .value, with: { (snapshot) in
+                if let isFollowing = snapshot.value as? Int, isFollowing == 1 {
+                    self.followStyle()
+                }else{
+                    self.unFollowStyle()
+                }
+                
+            }) { (error) in
+                print(error,"failled to check if following")
+            }
+            
+        }else{
+            editProfileButton.setTitle("Edit Prfile", for: .normal)
+            editProfileButton.backgroundColor = .clear
+        }
+    }
+    
+    
+    
+    
+  
+    
+    fileprivate func handelEditProfileOrFollow(){
+        guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else {return}
+        guard let userId = user?.uid else {return}
+        
+        if editProfileButton.titleLabel?.text == "Follow" {
+            //Follow
+            let ref = Database.database().reference().child("following").child(currentLoggedInUserId)
+            let values = [userId:1]
+            ref.updateChildValues(values) { (error, ref) in
+                if let err = error{
+                    print(err, "following error")
+                    return
+                }
+                self.followStyle()
+                print("succssfuly followed user")
+            }
+        }else{
+            //Unfollow
+            Database.database().reference().child("following").child(currentLoggedInUserId).child(userId).removeValue { (err, ref) in
+                if let err = err{
+                    print(err,"error unfollowing")
+                    return
+                }
+                print("Unfollowed")
+                self.unFollowStyle()
+            }
+        }
+        
+    }
+    
+    
+    fileprivate func unFollowStyle(){
+        self.editProfileButton.setTitle("Follow", for: .normal)
+        self.editProfileButton.backgroundColor = #colorLiteral(red: 0, green: 0.4705882353, blue: 0.6862745098, alpha: 1)
+        self.editProfileButton.setTitleColor(.white, for: .normal)
+    }
+    
+    fileprivate func followStyle(){
+        self.editProfileButton.setTitle("Unfollow", for: .normal)
+        self.editProfileButton.backgroundColor = .clear
+        self.editProfileButton.setTitleColor(.black, for: .normal)
+    }
+    
+    
     fileprivate func setupUI(){
         userImage.layer.cornerRadius = 80/2
         userImage.clipsToBounds = true
@@ -69,3 +147,4 @@ extension UserProfileHeader{
     
     
 }
+

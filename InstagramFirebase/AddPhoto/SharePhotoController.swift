@@ -112,6 +112,8 @@ extension SharePhotoController{
             }
             self.dismiss(animated: true, completion: nil)
             print("post saved to Database")
+            let name = NSNotification.Name(rawValue: "UpdateFeed")
+            NotificationCenter.default.post(name: name, object: nil)
         }
     }
     

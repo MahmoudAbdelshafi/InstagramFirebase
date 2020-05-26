@@ -26,11 +26,18 @@ class HomeController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let name = NSNotification.Name(rawValue: "UpdateFeed")
+        NotificationCenter.default.addObserver(self, selector: #selector(handelUpdateFeed), name: name, object: nil)
         navigationItem.titleView = UIImageView(image: UIImage(named: "logo2"))
-        fetchPosts()
-         
+        fetchAllPosts()
+        let refreshController = UIRefreshControl()
+        refreshController.addTarget(self, action: #selector(handelRefresh), for: .valueChanged)
+        homeCollectionView.refreshControl = refreshController
         
     }
+    
+    
+    
 }
 
 
@@ -61,6 +68,36 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
 
 //MARK:- Private functions
 extension HomeController{
+    @objc fileprivate func handelUpdateFeed(){
+        handelRefresh()
+    }
+    
+    
+    fileprivate func fetchAllPosts(){
+        fetchPosts()
+        fetchFollowingUserIds()
+    }
+    
+    @objc fileprivate func handelRefresh(){
+        posts.removeAll()
+        fetchAllPosts()
+    }
+    
+    
+    fileprivate func fetchFollowingUserIds(){
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        Database.database().reference().child("following").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let userIdsDictionary = snapshot.value as? [String:Any] else {return}
+            userIdsDictionary.forEach { (key,value) in
+                Database.fetchUserWithUID(uid: key, completion: self.fetchPostsWithUser(_:))
+            }
+        }) { (error) in
+            print(error,"error getting following users")
+        }
+        
+    }
+    
+    
     fileprivate func fetchPosts(){
         guard let uid = Auth.auth().currentUser?.uid else { return }
         Database.fetchUserWithUID(uid: uid, completion: fetchPostsWithUser(_:))
@@ -70,16 +107,20 @@ extension HomeController{
     
     fileprivate func fetchPostsWithUser(_ user:User){
         let ref = Database.database().reference().child("posts").child(user.uid)
-    ref.observeSingleEvent(of: .value, with: { (snapshot) in
-    guard let dictionaries = snapshot.value as? [String:Any] else {return}
-     dictionaries.forEach { (key,value) in
-     guard let dictionary = value as? [String: Any] else{ return}
-        let post = Post(user: user, dictionary: dictionary)
-        self.posts.append(post)
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            self.homeCollectionView.refreshControl?.endRefreshing()
+            guard let dictionaries = snapshot.value as? [String:Any] else {return}
+            dictionaries.forEach { (key,value) in
+                guard let dictionary = value as? [String: Any] else{ return}
+                let post = Post(user: user, dictionary: dictionary)
+                self.posts.append(post)
+            }
+            self.posts.sort { (p1, p2) -> Bool in
+                return p1.creationDate!.compare(p2.creationDate!) == .orderedDescending 
+            }
+            self.homeCollectionView.reloadData()
+        }) { (err) in
+            print("err",err)
         }
-        self.homeCollectionView.reloadData()
-    }) { (err) in
-        print("err",err)
-    }
     }
 }
