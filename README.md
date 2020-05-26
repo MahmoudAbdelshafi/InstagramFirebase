@@ -22,7 +22,7 @@ An iOS clone of instagram built using Swift 5, and Firebase.
 
 ## Home Feed
 
-| ![HomeFeed](Images/search.gif) |
+[HomeFeed](Images/search.gif) 
 
 
 
