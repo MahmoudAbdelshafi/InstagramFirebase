@@ -28,13 +28,18 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         let name = NSNotification.Name(rawValue: "UpdateFeed")
         NotificationCenter.default.addObserver(self, selector: #selector(handelUpdateFeed), name: name, object: nil)
-        navigationItem.titleView = UIImageView(image: UIImage(named: "logo2"))
+        navigationItem.titleView = UIImageView(image: UIImage(named: "logo"))
         fetchAllPosts()
         let refreshController = UIRefreshControl()
         refreshController.addTarget(self, action: #selector(handelRefresh), for: .valueChanged)
         homeCollectionView.refreshControl = refreshController
         
     }
+    
+    //MARK:IBActions
+    @IBAction func cameraPressed(_ sender: Any) {
+      handelCamera()
+       }
     
     
     
@@ -68,6 +73,14 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
 
 //MARK:- Private functions
 extension HomeController{
+    
+    fileprivate func handelCamera(){
+        let vc = CameraController()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true, completion: nil)
+    }
+    
+    
     @objc fileprivate func handelUpdateFeed(){
         handelRefresh()
     }

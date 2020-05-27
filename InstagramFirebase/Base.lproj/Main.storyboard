@@ -741,7 +741,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="H9H-7s-65M"/>
                     </view>
-                    <navigationItem key="navigationItem" id="J6F-FL-sUS"/>
+                    <navigationItem key="navigationItem" id="J6F-FL-sUS">
+                        <barButtonItem key="leftBarButtonItem" image="camera3" id="VkL-km-XDd">
+                            <connections>
+                                <action selector="cameraPressed:" destination="nPv-SP-PGM" id="qYo-1X-3AO"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="homeCollectionView" destination="BqU-Y6-Nsb" id="5Qv-qU-Vbq"/>
                     </connections>
@@ -843,6 +849,7 @@
     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
     <resources>
         <image name="Instagram_logo_white" width="200" height="71.5"/>
+        <image name="camera3" width="22" height="19"/>
         <image name="comment" width="22" height="19"/>
         <image name="gear" width="25" height="25"/>
         <image name="grid" width="22" height="22"/>
