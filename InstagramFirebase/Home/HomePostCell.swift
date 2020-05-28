@@ -8,8 +8,14 @@
 
 import UIKit
 
+
+protocol HomePostCellDelegate {
+    func didTapComment(post:Post)
+}
+
 class HomePostCell: UICollectionViewCell {
     
+    var delegate:HomePostCellDelegate?
     var post:Post?{
         didSet{
             
@@ -37,7 +43,9 @@ class HomePostCell: UICollectionViewCell {
        
         setupUI()
     }
-    
+    @IBAction func CommentPressed(_ sender: Any) {
+        handelComment()
+    }
     
     
 }
@@ -63,4 +71,10 @@ extension HomePostCell{
         userPhotoImageView.layer.cornerRadius = 40 / 2
        
     }
+    
+    
+    fileprivate func handelComment(){
+        guard let post = self.post else {return}
+        delegate?.didTapComment(post: post)
+       }
 }

@@ -38,8 +38,8 @@ class HomeController: UIViewController {
     
     //MARK:IBActions
     @IBAction func cameraPressed(_ sender: Any) {
-      handelCamera()
-       }
+        handelCamera()
+    }
     
     
     
@@ -47,7 +47,16 @@ class HomeController: UIViewController {
 
 
 //MARK:- Collection View DataSource Methods
-extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
+extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HomePostCellDelegate{
+    
+    
+    //HomePostCell Dealegate method
+    func didTapComment(post: Post) {
+        let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
+        commentsController.post = post
+        navigationController?.pushViewController(commentsController, animated: true)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return posts.count
     }
@@ -57,6 +66,7 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "homeCell", for: indexPath) as! HomePostCell
         cell.photoImageView.image = nil
         cell.post = posts[indexPath.item]
+        cell.delegate = self
         return cell
     }
     
@@ -73,6 +83,8 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
 
 //MARK:- Private functions
 extension HomeController{
+    
+    
     
     fileprivate func handelCamera(){
         let vc = CameraController()
@@ -125,7 +137,8 @@ extension HomeController{
             guard let dictionaries = snapshot.value as? [String:Any] else {return}
             dictionaries.forEach { (key,value) in
                 guard let dictionary = value as? [String: Any] else{ return}
-                let post = Post(user: user, dictionary: dictionary)
+                var post = Post(user: user, dictionary: dictionary)
+                post.id = key
                 self.posts.append(post)
             }
             self.posts.sort { (p1, p2) -> Bool in

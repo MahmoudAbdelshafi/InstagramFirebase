@@ -664,6 +664,9 @@
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ajN-mF-gwx">
                                                             <rect key="frame" x="53.5" y="0.0" width="43" height="50"/>
                                                             <state key="normal" image="comment"/>
+                                                            <connections>
+                                                                <action selector="CommentPressed:" destination="d3x-mD-YqL" eventType="touchUpInside" id="Dq9-K7-ri8"/>
+                                                            </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EnU-zq-Hbg">
                                                             <rect key="frame" x="106.5" y="0.0" width="43.5" height="50"/>
@@ -754,7 +757,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="12l-fP-k22" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-6274.3999999999996" y="393.55322338830587"/>
+            <point key="canvasLocation" x="-6201" y="394"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="pdn-2T-2aw">
