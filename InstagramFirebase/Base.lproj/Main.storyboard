@@ -185,23 +185,32 @@
                                                 <constraint firstAttribute="width" constant="80" id="YIU-hz-okG"/>
                                             </constraints>
                                         </imageView>
-                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="57v-nh-tOe" userLabel="GridStack">
-                                            <rect key="frame" x="8" y="267" width="367" height="50"/>
+                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="57v-nh-tOe" userLabel="GridStack">
+                                            <rect key="frame" x="0.0" y="267" width="375" height="50"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jiw-Xg-Iao">
-                                                    <rect key="frame" x="0.0" y="0.0" width="122.5" height="50"/>
-                                                    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="121.5" height="50"/>
+                                                    <color key="tintColor" red="0.0" green="0.47058823529999999" blue="0.68627450980000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <state key="normal" image="grid"/>
+                                                    <connections>
+                                                        <action selector="gridPressed:" destination="Avq-VX-jlv" eventType="touchUpInside" id="dCZ-w1-ZZ5"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Bf-xT-OfN">
-                                                    <rect key="frame" x="122.5" y="0.0" width="122" height="50"/>
-                                                    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <rect key="frame" x="126.5" y="0.0" width="122" height="50"/>
+                                                    <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal" image="list"/>
+                                                    <connections>
+                                                        <action selector="listPressed:" destination="Avq-VX-jlv" eventType="touchUpInside" id="hXC-zH-R8W"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1uF-je-Khg">
-                                                    <rect key="frame" x="244.5" y="0.0" width="122.5" height="50"/>
-                                                    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <rect key="frame" x="253.5" y="0.0" width="121.5" height="50"/>
+                                                    <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal" image="ribbon"/>
+                                                    <connections>
+                                                        <action selector="bookmarkPressed:" destination="Avq-VX-jlv" eventType="touchUpInside" id="tQv-GA-CJN"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -292,13 +301,16 @@
                                         <constraint firstItem="08c-fd-XiQ" firstAttribute="leading" secondItem="P8d-3J-YfO" secondAttribute="trailing" constant="12" id="e1M-5C-nWw"/>
                                         <constraint firstItem="3ZN-Uy-YiR" firstAttribute="trailing" secondItem="Avq-VX-jlv" secondAttribute="trailingMargin" constant="-12" id="ijK-eq-0va"/>
                                         <constraint firstItem="A0x-bw-UJR" firstAttribute="top" secondItem="P8d-3J-YfO" secondAttribute="bottom" constant="15" id="oCj-Rw-eZQ"/>
-                                        <constraint firstItem="57v-nh-tOe" firstAttribute="leading" secondItem="Avq-VX-jlv" secondAttribute="leading" constant="8" id="tgm-Lw-jfD"/>
+                                        <constraint firstItem="57v-nh-tOe" firstAttribute="leading" secondItem="Avq-VX-jlv" secondAttribute="leading" id="tgm-Lw-jfD"/>
                                         <constraint firstItem="3ZN-Uy-YiR" firstAttribute="leading" secondItem="P8d-3J-YfO" secondAttribute="trailing" constant="12" id="ytx-gw-B53"/>
                                     </constraints>
                                     <connections>
+                                        <outlet property="bookMarkButton" destination="1uF-je-Khg" id="cFH-bz-TQC"/>
                                         <outlet property="editProfileButton" destination="08c-fd-XiQ" id="hQg-1n-xMe"/>
                                         <outlet property="followersLabel" destination="iov-Oh-dUk" id="VI8-Cy-OC0"/>
                                         <outlet property="followingLabel" destination="Gau-iL-teg" id="91w-eJ-Mgk"/>
+                                        <outlet property="gridButton" destination="Jiw-Xg-Iao" id="yqe-L4-9Bt"/>
+                                        <outlet property="listButton" destination="9Bf-xT-OfN" id="E2n-5n-I2D"/>
                                         <outlet property="postsLabel" destination="RQr-4V-H1M" id="cr3-8I-Mu7"/>
                                         <outlet property="userImage" destination="P8d-3J-YfO" id="OQ6-k2-7gr"/>
                                         <outlet property="userLabel" destination="A0x-bw-UJR" id="Ag0-fs-Q4o"/>
@@ -622,113 +634,7 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="homeCell" id="d3x-mD-YqL" customClass="HomePostCell" customModule="InstagramFirebase" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="413"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="nEe-HZ-uUD">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="413"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jRF-hb-F0i" customClass="CustomImageView" customModule="InstagramFirebase" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="56" width="375" height="307"/>
-                                                </imageView>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VYI-K7-PiT" customClass="CustomImageView" customModule="InstagramFirebase" customModuleProvider="target">
-                                                    <rect key="frame" x="8" y="8" width="40" height="40"/>
-                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="40" id="MPZ-fi-iKC"/>
-                                                        <constraint firstAttribute="width" constant="40" id="Ynn-Cn-DWb"/>
-                                                    </constraints>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="lPe-EO-OG3">
-                                                    <rect key="frame" x="56" y="19.5" width="259" height="17"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M8q-lw-mlU">
-                                                    <rect key="frame" x="325" y="0.0" width="50" height="56"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="50" id="zfX-HL-fmf"/>
-                                                    </constraints>
-                                                    <state key="normal" title="•••"/>
-                                                </button>
-                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="JS0-82-Jn7">
-                                                    <rect key="frame" x="8" y="363" width="150" height="50"/>
-                                                    <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q8N-zI-wr4">
-                                                            <rect key="frame" x="0.0" y="0.0" width="43.5" height="50"/>
-                                                            <state key="normal" image="like_unselected"/>
-                                                        </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ajN-mF-gwx">
-                                                            <rect key="frame" x="53.5" y="0.0" width="43" height="50"/>
-                                                            <state key="normal" image="comment"/>
-                                                            <connections>
-                                                                <action selector="CommentPressed:" destination="d3x-mD-YqL" eventType="touchUpInside" id="Dq9-K7-ri8"/>
-                                                            </connections>
-                                                        </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EnU-zq-Hbg">
-                                                            <rect key="frame" x="106.5" y="0.0" width="43.5" height="50"/>
-                                                            <state key="normal" image="send2"/>
-                                                        </button>
-                                                    </subviews>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="150" id="LJ0-GY-aX3"/>
-                                                        <constraint firstAttribute="height" constant="50" id="cuh-Lr-Caa"/>
-                                                    </constraints>
-                                                </stackView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eov-32-7GV">
-                                                    <rect key="frame" x="335" y="363" width="40" height="50"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="40" id="nZC-Z5-tSd"/>
-                                                        <constraint firstAttribute="height" constant="50" id="t0s-dG-jaX"/>
-                                                    </constraints>
-                                                    <state key="normal" image="ribbon"/>
-                                                </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g2l-aq-YoW">
-                                                    <rect key="frame" x="8" y="413" width="359" height="0.0"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="lPe-EO-OG3" firstAttribute="leading" secondItem="VYI-K7-PiT" secondAttribute="trailing" constant="8" id="165-ad-t30"/>
-                                                <constraint firstItem="jRF-hb-F0i" firstAttribute="top" secondItem="VYI-K7-PiT" secondAttribute="bottom" constant="8" id="Ah6-c2-Z6I"/>
-                                                <constraint firstItem="VYI-K7-PiT" firstAttribute="leading" secondItem="nEe-HZ-uUD" secondAttribute="leading" constant="8" id="HdS-JI-Inq"/>
-                                                <constraint firstItem="eov-32-7GV" firstAttribute="top" secondItem="jRF-hb-F0i" secondAttribute="bottom" id="IQx-V1-36I"/>
-                                                <constraint firstItem="lPe-EO-OG3" firstAttribute="centerY" secondItem="VYI-K7-PiT" secondAttribute="centerY" id="JGu-Dk-2TJ"/>
-                                                <constraint firstAttribute="trailing" secondItem="g2l-aq-YoW" secondAttribute="trailing" constant="8" id="KZS-uY-FVX"/>
-                                                <constraint firstItem="g2l-aq-YoW" firstAttribute="top" secondItem="JS0-82-Jn7" secondAttribute="bottom" id="MeA-pe-ttU"/>
-                                                <constraint firstAttribute="trailing" secondItem="jRF-hb-F0i" secondAttribute="trailing" id="Vqy-tI-FJN"/>
-                                                <constraint firstAttribute="bottom" secondItem="g2l-aq-YoW" secondAttribute="bottom" id="fbP-6E-18T"/>
-                                                <constraint firstItem="JS0-82-Jn7" firstAttribute="leading" secondItem="nEe-HZ-uUD" secondAttribute="leading" constant="8" id="gfv-o8-ZIc"/>
-                                                <constraint firstItem="g2l-aq-YoW" firstAttribute="leading" secondItem="nEe-HZ-uUD" secondAttribute="leading" constant="8" id="hae-4t-SVP"/>
-                                                <constraint firstItem="M8q-lw-mlU" firstAttribute="leading" secondItem="lPe-EO-OG3" secondAttribute="trailing" constant="10" id="jcF-LM-cBE"/>
-                                                <constraint firstItem="JS0-82-Jn7" firstAttribute="top" secondItem="jRF-hb-F0i" secondAttribute="bottom" id="kpR-6q-q2P"/>
-                                                <constraint firstAttribute="trailing" secondItem="M8q-lw-mlU" secondAttribute="trailing" id="lXd-fz-dia"/>
-                                                <constraint firstItem="VYI-K7-PiT" firstAttribute="top" secondItem="nEe-HZ-uUD" secondAttribute="top" constant="8" id="lnY-cL-ZIl"/>
-                                                <constraint firstItem="jRF-hb-F0i" firstAttribute="leading" secondItem="nEe-HZ-uUD" secondAttribute="leading" id="oSE-9v-qDk"/>
-                                                <constraint firstAttribute="trailing" secondItem="eov-32-7GV" secondAttribute="trailing" id="tot-Fe-vS0"/>
-                                                <constraint firstItem="jRF-hb-F0i" firstAttribute="top" secondItem="M8q-lw-mlU" secondAttribute="bottom" id="xhr-ZJ-Txi"/>
-                                                <constraint firstItem="M8q-lw-mlU" firstAttribute="top" secondItem="nEe-HZ-uUD" secondAttribute="top" id="zwY-Vs-BKa"/>
-                                            </constraints>
-                                        </collectionViewCellContentView>
-                                        <size key="customSize" width="375" height="413"/>
-                                        <connections>
-                                            <outlet property="bookMarkButton" destination="eov-32-7GV" id="UMY-j2-t4L"/>
-                                            <outlet property="captionLabel" destination="g2l-aq-YoW" id="wlO-zk-BEq"/>
-                                            <outlet property="commentButton" destination="ajN-mF-gwx" id="qxX-ZE-2Rq"/>
-                                            <outlet property="likeButton" destination="q8N-zI-wr4" id="5ZK-X4-PRo"/>
-                                            <outlet property="optionButton" destination="M8q-lw-mlU" id="5It-wL-km4"/>
-                                            <outlet property="photoImageView" destination="jRF-hb-F0i" id="O7b-XC-Hhd"/>
-                                            <outlet property="sendMessageButton" destination="EnU-zq-Hbg" id="pTr-TZ-h7S"/>
-                                            <outlet property="userPhotoImageView" destination="VYI-K7-PiT" id="A0y-wo-uUJ"/>
-                                            <outlet property="usernameLabel" destination="lPe-EO-OG3" id="Scz-LQ-BNW"/>
-                                        </connections>
-                                    </collectionViewCell>
-                                </cells>
+                                <cells/>
                                 <connections>
                                     <outlet property="dataSource" destination="nPv-SP-PGM" id="pTn-1B-ptP"/>
                                     <outlet property="delegate" destination="nPv-SP-PGM" id="ZGR-Wd-XgV"/>
@@ -853,7 +759,6 @@
     <resources>
         <image name="Instagram_logo_white" width="200" height="71.5"/>
         <image name="camera3" width="22" height="19"/>
-        <image name="comment" width="22" height="19"/>
         <image name="gear" width="25" height="25"/>
         <image name="grid" width="22" height="22"/>
         <image name="home_selected" width="22" height="22"/>
@@ -868,6 +773,5 @@
         <image name="ribbon" width="18.5" height="26"/>
         <image name="search_selected" width="22" height="22"/>
         <image name="search_unselected" width="22" height="22"/>
-        <image name="send2" width="22" height="19.5"/>
     </resources>
 </document>

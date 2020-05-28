@@ -11,17 +11,15 @@ import UIKit
 class UserProfileCollectionViewCell: UICollectionViewCell {
     var post:Post?{
         didSet{
-   
-           // cellImage.loadImage(urlString: post!.imageUrl)
-            
+            guard let imageUrl = post?.imageUrl else {return}
+          userImage.loadImage(urlString: imageUrl)
+      
         }
     }
     
     override func awakeFromNib() {
         
-      
-//        userImage.clipsToBounds = true
-//        userImage.setNeedsDisplay()
+
        }
        
     
@@ -31,8 +29,3 @@ class UserProfileCollectionViewCell: UICollectionViewCell {
     
 }
 
-//MARK:- private Functions
-extension UserProfileCollectionViewCell{
-    
-   
-}

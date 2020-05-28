@@ -11,6 +11,7 @@ import UIKit
 
 protocol HomePostCellDelegate {
     func didTapComment(post:Post)
+    func didLike(for cell:HomePostCell)
 }
 
 class HomePostCell: UICollectionViewCell {
@@ -20,6 +21,9 @@ class HomePostCell: UICollectionViewCell {
         didSet{
             
             guard let imageUrl = post?.imageUrl else {return}
+            let likedImage = UIImage(named: "likephoto_selected")
+            let unLikedImage = UIImage(named: "like_unselected")
+            likeButton.setImage(post?.hasLiked == true ? likedImage  : unLikedImage , for: .normal)
             photoImageView.loadImage(urlString: imageUrl)
             usernameLabel.text = post?.user.username
             guard let profileImageUrl = post?.user.profileImageUrl else {return}
@@ -43,11 +47,13 @@ class HomePostCell: UICollectionViewCell {
        
         setupUI()
     }
-    @IBAction func CommentPressed(_ sender: Any) {
+    @IBAction func commentPressed(_ sender: Any) {
         handelComment()
     }
     
-    
+    @IBAction func likePressed(_ sender: Any){
+        handelLike()
+    }
 }
 
 //MARK:- Private Functions
@@ -72,9 +78,14 @@ extension HomePostCell{
        
     }
     
+    fileprivate func handelLike(){
+        delegate?.didLike(for: self)
+        
+    }
     
     fileprivate func handelComment(){
         guard let post = self.post else {return}
         delegate?.didTapComment(post: post)
+        
        }
 }

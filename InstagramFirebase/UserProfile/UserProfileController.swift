@@ -16,6 +16,7 @@ class UserProfileController: UIViewController {
     
     
     //MARK:- properties
+    var isGridView = true
     var imagesData:UIImage?
     var userId:String?
     var user:User?
@@ -32,11 +33,12 @@ class UserProfileController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let cell = UINib(nibName: "HomePostCell", bundle: nil)
+        userCollectionView.register(cell, forCellWithReuseIdentifier: "HomePostCell")
         fetchUser()
-            
         
-      
+        
+        
         
     }
     
@@ -55,17 +57,27 @@ class UserProfileController: UIViewController {
 //MARK:- Private Functions
 extension UserProfileController{
     
-    //Get posts
+      //get profile image URL from data base
+      fileprivate func fetchUser(){
+          let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
+          Database.fetchUserWithUID(uid: uid) { (user) in
+              self.user = user
+              self.navigationItem.title = user.username
+              self.fetchOrderdPosts()
+          }
+      }
+      
+    
+    //Get Posts
     fileprivate func fetchOrderdPosts(){
         guard let uid = self.user?.uid else { return }
         let ref = Database.database().reference().child("posts").child(uid)
         ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
             guard let dictionary = snapshot.value as? [String:Any] else {return}
-            let user = User(uid: uid, dicionary: ["username" : "Any"])
-            let post = Post(user: user, dictionary: dictionary)
-            self.posts.insert(post, at: 0)
-            // self.posts.append(post)
-           self.userCollectionView.reloadData()
+            guard let user = self.user else{return}
+                let post = Post(user: user, dictionary: dictionary)
+                 self.posts.insert(post, at: 0)
+            self.userCollectionView.reloadData()
         }) { (error) in
             print("failled to get posts",error)
         }
@@ -105,19 +117,9 @@ extension UserProfileController{
     
     
     
-
     
     
-    //get profile image URL from data base
-    fileprivate func fetchUser(){
-        let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
-        Database.fetchUserWithUID(uid: uid) { (user) in
-            self.user = user
-            self.navigationItem.title = user.username
-            self.fetchOrderdPosts()
-        }
-    }
-    
+  
     
     
     
@@ -131,7 +133,7 @@ extension UserProfileController{
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "UserProfileHeader", for: indexPath) as! UserProfileHeader
         header.user = user
-        header.userLabel.text = user?.username
+        header.delegate = self
         return header
     }
     
@@ -149,24 +151,47 @@ extension UserProfileController{
 
 
 //MARK:- User Profile CollectionView Datasource methods
-extension UserProfileController : UICollectionViewDataSource,UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+extension UserProfileController : UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,UserProfileHeaderDelegate{
+    //User Profile Header Delegate Methods
+    func didChangeToListView() {
+        isGridView = false
+        userCollectionView.reloadData()
+    }
+    
+    func didChangeToGridView() {
+        isGridView = true
+        userCollectionView.reloadData()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return posts.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! UserProfileCollectionViewCell
-        let post = posts[indexPath.item].imageUrl
-        cell.userImage.loadImage(urlString: post)
-        
-        //        cell.post = posts[indexPath.item]
-        return cell
+        if isGridView{
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! UserProfileCollectionViewCell
+            cell.post = posts[indexPath.item]
+           
+            return cell
+            
+        }else{
+            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePostCell", for: indexPath) as! HomePostCell
+         
+            cell.post = posts[indexPath.item]
+            return cell
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (view.frame.width - 2) / 3
-        return CGSize(width: width, height: width)
+        if isGridView{
+            let width = (view.frame.width - 2) / 3
+            return CGSize(width: width, height: width)
+        }else{
+            
+            let height:CGFloat = 186 + view.frame.width
+            return CGSize(width: view.frame.width, height: height)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

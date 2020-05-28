@@ -13,7 +13,7 @@ struct User{
      let username:String
      let profileImageUrl:String?
     init(uid:String,dicionary:[String:Any]) {
-         self.username = (dicionary["username"] as! String)
+         self.username = (dicionary["username"] as? String ?? "")
          self.profileImageUrl = (dicionary["profileImageUrl"] as? String)
         self.uid = uid
      }

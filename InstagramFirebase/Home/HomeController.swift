@@ -33,6 +33,10 @@ class HomeController: UIViewController {
         let refreshController = UIRefreshControl()
         refreshController.addTarget(self, action: #selector(handelRefresh), for: .valueChanged)
         homeCollectionView.refreshControl = refreshController
+        let cell = UINib(nibName: "HomePostCell", bundle: nil)
+        homeCollectionView.register(cell, forCellWithReuseIdentifier: "HomePostCell")
+       
+        
         
     }
     
@@ -48,9 +52,28 @@ class HomeController: UIViewController {
 
 //MARK:- Collection View DataSource Methods
 extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HomePostCellDelegate{
+   
+    //HomePostCell Dealegate methods
+    func didLike(for cell: HomePostCell) {
+        guard let indexPath = homeCollectionView.indexPath(for:cell) else {return}
+        var post = self.posts[indexPath.item]
+        print(post)
+        guard let postId = post.id else {return}
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let values = [uid:post.hasLiked == true ? 0:1]
+        Database.database().reference().child("likes").child(postId).updateChildValues(values ) { (error, _) in
+            if let error = error{
+                print("error did not submit like",error)
+                return
+            }
+            print("like submitted")
+            post.hasLiked = !post.hasLiked
+            self.posts[indexPath.item] = post
+            self.homeCollectionView.reloadItems(at: [indexPath])
+           
+        }
+    }
     
-    
-    //HomePostCell Dealegate method
     func didTapComment(post: Post) {
         let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
         commentsController.post = post
@@ -63,8 +86,8 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "homeCell", for: indexPath) as! HomePostCell
-        cell.photoImageView.image = nil
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePostCell", for: indexPath) as! HomePostCell
+        
         cell.post = posts[indexPath.item]
         cell.delegate = self
         return cell
@@ -139,12 +162,25 @@ extension HomeController{
                 guard let dictionary = value as? [String: Any] else{ return}
                 var post = Post(user: user, dictionary: dictionary)
                 post.id = key
-                self.posts.append(post)
+                guard let uid = Auth.auth().currentUser?.uid else {return}
+                Database.database().reference().child("likes").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                    if let value = snapshot.value as? Int ,value == 1{
+                        post.hasLiked = true
+                    }else{
+                        post.hasLiked = false
+                    }
+                    self.posts.append(post)
+                    self.posts.sort { (p1, p2) -> Bool in
+                        return p1.creationDate!.compare(p2.creationDate!) == .orderedDescending
+                    }
+                    self.homeCollectionView.reloadData()
+                }) { (error) in
+                    print("failled to fetch like info for posts",error)
+                }
+                
             }
-            self.posts.sort { (p1, p2) -> Bool in
-                return p1.creationDate!.compare(p2.creationDate!) == .orderedDescending 
-            }
-            self.homeCollectionView.reloadData()
+          
+           
         }) { (err) in
             print("err",err)
         }

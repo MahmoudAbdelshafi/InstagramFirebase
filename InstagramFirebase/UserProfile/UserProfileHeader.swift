@@ -9,26 +9,37 @@
 import UIKit
 import Firebase
 
+
+protocol UserProfileHeaderDelegate {
+    func didChangeToListView()
+    func didChangeToGridView()
+}
+
 class UserProfileHeader: UICollectionReusableView {
     
     //MARK:- Properties
+    var delegate:UserProfileHeaderDelegate?
     var numberOfPosts = String()
     var user:User?{
         didSet{
             guard let imageUrl = user?.profileImageUrl else { return }
             userImage.loadImage(urlString: imageUrl)
+            userLabel.text = user?.username
             setupEditProfileButton()
         }
     }
     
     
-    
+    //MARK:- IBOutlets
     @IBOutlet weak var userImage: CustomImageView!
     @IBOutlet weak var postsLabel: UILabel!
     @IBOutlet weak var followersLabel: UILabel!
     @IBOutlet weak var followingLabel: UILabel!
     @IBOutlet weak var userLabel: UILabel!
     @IBOutlet weak var editProfileButton: UIButton!
+    @IBOutlet weak var gridButton: UIButton!
+    @IBOutlet weak var listButton: UIButton!
+    @IBOutlet weak var bookMarkButton: UIButton!
     
    
     override func awakeFromNib() {
@@ -39,16 +50,49 @@ class UserProfileHeader: UICollectionReusableView {
     //MARK:- IBActions
     @IBAction func editProfilePressed(_ sender: Any) {
         handelEditProfileOrFollow()
-        
     }
-    
+    @IBAction func gridPressed(_ sender: Any) {
+        handelChangeToGrid()
+    }
+    @IBAction func listPressed(_ sender: Any) {
+        handelChangeToListView()
+    }
+    @IBAction func bookmarkPressed(_ sender: Any) {
+        funchandelChangeToBookmark()
+    }
 }
 
 
 
-//MARK:- Private Functions
 
+
+
+//MARK:- Private Functions
 extension UserProfileHeader{
+    
+    fileprivate func handelChangeToListView(){
+        print("list")
+        listButton.tintColor = #colorLiteral(red: 0, green: 0.4705882353, blue: 0.6862745098, alpha: 1)
+        gridButton.tintColor = .lightGray
+        bookMarkButton.tintColor = .lightGray
+        delegate?.didChangeToListView()
+    }
+    
+    fileprivate func handelChangeToGrid(){
+        listButton.tintColor = .lightGray
+        gridButton.tintColor = #colorLiteral(red: 0, green: 0.4705882353, blue: 0.6862745098, alpha: 1)
+        bookMarkButton.tintColor = .lightGray
+        delegate?.didChangeToGridView()
+    }
+    
+    
+    fileprivate func funchandelChangeToBookmark(){
+        listButton.tintColor = .lightGray
+        gridButton.tintColor = .lightGray
+        bookMarkButton.tintColor = #colorLiteral(red: 0, green: 0.4705882353, blue: 0.6862745098, alpha: 1)
+    }
+    
+    
     
     fileprivate func setupEditProfileButton(){
         guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else {return}
