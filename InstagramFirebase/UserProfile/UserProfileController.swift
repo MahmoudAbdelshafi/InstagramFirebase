@@ -16,6 +16,8 @@ class UserProfileController: UIViewController {
     
     
     //MARK:- properties
+    var activityView: UIActivityIndicatorView?
+    var numberOfPosts = [Post]()
     var isFinishedPagining = false
     var isGridView = true
     var imagesData:UIImage?
@@ -37,6 +39,7 @@ class UserProfileController: UIViewController {
         let cell = UINib(nibName: "HomePostCell", bundle: nil)
         userCollectionView.register(cell, forCellWithReuseIdentifier: "HomePostCell")
         fetchUser()
+        
     
     }
     
@@ -60,6 +63,8 @@ extension UserProfileController{
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "UserProfileHeader", for: indexPath) as! UserProfileHeader
         header.user = user
         header.delegate = self
+        header.numberOfPosts = numberOfPosts.count
+       
         return header
     }
     
@@ -150,6 +155,7 @@ extension UserProfileController{
             let value = posts.last?.creationDate?.timeIntervalSince1970
             query = query.queryEnding(atValue: value)
         }
+        showActivityIndicator()
         query.queryLimited(toLast: 4).observeSingleEvent(of: .value, with: { (snapshot)  in
             guard  var allObjects = snapshot.children.allObjects as? [DataSnapshot] else {return}
             allObjects.reverse()
@@ -169,10 +175,11 @@ extension UserProfileController{
 //            self.posts.forEach { (post) in
 //
 //            }
-            
+            self.hideActivityIndicator()
             self.userCollectionView.reloadData()
         }) { (error) in
             print("Pagining Error",error)
+            self.hideActivityIndicator()
         }
         
     }
@@ -184,37 +191,44 @@ extension UserProfileController{
           Database.fetchUserWithUID(uid: uid) { (user) in
               self.user = user
               self.navigationItem.title = user.username
+            self.getPostsNumber()
             self.paginatePosts()
               //self.fetchOrderdPosts()
           }
       }
       
     
-    //Get Posts
-    fileprivate func fetchOrderdPosts(){
+    //fetchOrderdPosts
+    fileprivate func getPostsNumber(){
         guard let uid = self.user?.uid else { return }
         let ref = Database.database().reference().child("posts").child(uid)
         ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
             guard let dictionary = snapshot.value as? [String:Any] else {return}
             guard let user = self.user else{return}
                 let post = Post(user: user, dictionary: dictionary)
-                 self.posts.insert(post, at: 0)
-            self.userCollectionView.reloadData()
+                 self.numberOfPosts.insert(post, at: 0)
+            print(self.numberOfPosts.count)
+//            self.userCollectionView.reloadData()
         }) { (error) in
             print("failled to get posts",error)
         }
+        self.userCollectionView.reloadData()
+      
     }
     
     
     //Logout Alert
     fileprivate func handelLogOut(){
+       
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { (_) in
             do{
+                self.showActivityIndicator()
                 try Auth.auth().signOut()
                 
                 self.presentLogInController()
             }catch{
+                self.hideActivityIndicator()
                 print("Error SignOut")
             }
         }))
@@ -232,6 +246,7 @@ extension UserProfileController{
         nav.show(loginController, sender: self)
         nav.modalPresentationStyle = .fullScreen
         DispatchQueue.main.async {
+            self.hideActivityIndicator()
             self.present(nav, animated: true)
         }
     }
@@ -241,7 +256,18 @@ extension UserProfileController{
     
     
     
-  
+   fileprivate func showActivityIndicator() {
+       activityView = UIActivityIndicatorView(style: .gray)
+       activityView?.center = self.view.center
+       self.view.addSubview(activityView!)
+       activityView?.startAnimating()
+   }
+   
+  fileprivate func hideActivityIndicator(){
+       if (activityView != nil){
+           activityView?.stopAnimating()
+       }
+   }
     
     
     

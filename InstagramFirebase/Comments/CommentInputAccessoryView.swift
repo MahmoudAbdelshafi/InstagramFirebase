@@ -11,6 +11,7 @@ import UIKit
 
 protocol CommentInputAccessoryViewDelegate {
     func didSubmit(for comment: String)
+    
 }
 
 
@@ -20,8 +21,8 @@ class CommentInputAccessoryView: UIView{
     
     let submitButton :UIButton = {
         let sb = UIButton(type: .system)
-        sb.setTitle("Submit", for: .normal)
-        sb.setTitleColor(.black, for: .normal)
+        sb.setTitle("Post", for: .normal)
+        sb.setTitleColor(#colorLiteral(red: 0, green: 0.4705882353, blue: 0.6862745098, alpha: 1), for: .normal)
         sb.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         sb.addTarget(self, action: #selector(handelSubmit), for: .touchUpInside)
         return sb
@@ -32,9 +33,6 @@ class CommentInputAccessoryView: UIView{
         let tv = CommentInputTextView ()
         tv.isScrollEnabled = false
         tv.font = UIFont.systemFont(ofSize: 18)
-   
-        
-        
         return tv
     }()
     

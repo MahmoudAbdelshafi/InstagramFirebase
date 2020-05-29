@@ -12,6 +12,9 @@ import Firebase
 class SignUpController: UIViewController, UINavigationControllerDelegate {
     
     
+    //MARK:-Properties
+    var activityView: UIActivityIndicatorView?
+    
     //MARK:- IBOutlets
     @IBOutlet weak var emailTextFiled: UITextField!
     @IBOutlet weak var usernameTextField: UITextField!
@@ -28,6 +31,7 @@ class SignUpController: UIViewController, UINavigationControllerDelegate {
         
         
     }
+    
     
     
     
@@ -58,23 +62,31 @@ extension SignUpController{
         guard let email = emailTextFiled.text, email.count > 0 else {return}
         guard let password = passwordTextFiled.text, password.count > 0 else {return}
         guard let username = usernameTextField.text, username.count > 0 else {return}
+        signUpButton.isEnabled = false
+        showActivityIndicator()
         Auth.auth().createUser(withEmail: email, password: password) { ( user, error) in
             if let err = error{
                 print("error signup",err)
+                self.signUpButton.isEnabled = true
+                self.hideActivityIndicator()
                 return
             }
             print("Success Signned Up",user?.user.uid ?? "")
+            self.signUpButton.isEnabled = true
             guard let image = self.plusPhotoButton.imageView?.image else {return}
             guard let uploadData = image.jpegData(compressionQuality: 0.3) else {return}
             let filename = NSUUID().uuidString
             Storage.storage().reference().child("profile_images").child(filename).putData(uploadData, metadata: nil) { (metadata, err) in
                 if let error = err{
+                  self.hideActivityIndicator()
+                    self.signUpButton.isEnabled = true
                     print("Error upload profile image" , error)
                     return
                 }
                 Storage.storage().reference().child("profile_images").child(filename).downloadURL { (url, error) in
                     if let err = error {
                         print(err.localizedDescription)
+                        self.signUpButton.isEnabled = true
                     }
                     let profileImageURL = url?.absoluteString
                     guard let uid = user?.user.uid else {return}
@@ -83,8 +95,13 @@ extension SignUpController{
                     Database.database().reference().child("users").updateChildValues(values) { (error, ref) in
                         if error != nil {
                             print("failled to save user info into database")
+                            self.signUpButton.isEnabled = true
+                            self.hideActivityIndicator()
                         }
                         print("saved to database")
+                        self.signUpButton.isEnabled = true
+                       self.hideActivityIndicator()
+                        
                         self.dismiss(animated: true, completion: nil)
                     }
                 }
@@ -128,12 +145,14 @@ extension SignUpController: UIImagePickerControllerDelegate{
     
     //Handel PlusPhotoButton
     fileprivate func PlusPhotoButton(){
+        showActivityIndicator()
         let imagePickerController = UIImagePickerController()
+ 
         imagePickerController.delegate = self
         imagePickerController.allowsEditing = true
         
-        present(imagePickerController, animated: true, completion: nil)
-        
+        present(imagePickerController, animated: true, completion: {self.hideActivityIndicator()})
+       
     }
     
     
@@ -152,4 +171,20 @@ extension SignUpController: UIImagePickerControllerDelegate{
         setupUI()
         handelTextInputChange()
     }
+    
+    
+    fileprivate func showActivityIndicator() {
+        activityView = UIActivityIndicatorView(style: .gray)
+        activityView?.center = self.view.center
+        
+        self.view.addSubview(activityView!)
+        activityView?.startAnimating()
+    }
+    
+   fileprivate func hideActivityIndicator(){
+        if (activityView != nil){
+            activityView?.stopAnimating()
+        }
+    }
+ 
 }

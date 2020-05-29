@@ -16,6 +16,7 @@ class PhotoSelectorController: UICollectionViewController {
     
     
     //MARK:- Properties
+    var activityView: UIActivityIndicatorView?
     var images = [UIImage]()
     var selectedImage:UIImage?
     var assets = [PHAsset]()
@@ -45,63 +46,6 @@ class PhotoSelectorController: UICollectionViewController {
     
 }
 
-//MARK:- Private functions
-extension PhotoSelectorController{
-   
-    //fetch local photos method
-    fileprivate func fetchPhotos(){
-        
-        DispatchQueue.global(qos: .background).async {
-        let fetchOptions = PHFetchOptions()
-        let allPhotos = PHAsset.fetchAssets(with:.image , options: fetchOptions)
-        allPhotos.enumerateObjects { (asset, count, stop) in
-            let imageManager = PHImageManager.default()
-            let targetSize = CGSize(width: 10, height: 10)
-            let options = PHImageRequestOptions()
-            let sortDiscriptors = NSSortDescriptor(key: "creationDate", ascending: false)
-            fetchOptions.sortDescriptors = [sortDiscriptors]
-            options.isSynchronous = true
-            imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options) { (image, info) in
-                if let image = image {
-                    self.images.append(image)
-                    self.assets.append(asset)
-                    if self.selectedImage == nil {
-                        self.selectedImage = image
-                    }
-                }
-                if count == allPhotos.count - 1 {
-                    DispatchQueue.main.async {
-                        self.collectionView.reloadData()
-                    }
-                }
-            }
-        }
-        }
-    }
-    
-    
-    
-    fileprivate func registerCells(){
-        self.collectionView!.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: "cellId")
-        self.collectionView.register(PhotoSelectorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
-    }
-    
-    fileprivate func setupNavigationButton(){
-        navigationController?.navigationBar.tintColor = .black
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handelCancel))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handelNext))
-    }
-    
-    
-    @objc fileprivate func handelCancel(){
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func handelNext(){
-        SharePhotoController.selectedImage = header?.HeaderPhotoImage.image
-        navigationController?.pushViewController(SharePhotoController(), animated: true)
-    }
-}
 
 
 // MARK: UICollectionViewDataSource
@@ -140,10 +84,9 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
 extension PhotoSelectorController{
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.selectedImage = images[indexPath.item]
-        self.collectionView.reloadData()
        let indexPath = IndexPath(item: 0, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
-        
+        self.collectionView.reloadData()
         
     }
 }
@@ -157,12 +100,14 @@ extension PhotoSelectorController{
         self.header = cell
         let imageManger = PHImageManager.default()
         if let selectedImage = selectedImage {
-            if let index = self.images.firstIndex(of:selectedImage){
+            if let index = self.images.lastIndex(of:selectedImage){
                 let selectedAsset = self.assets[index]
                 let targetSize = CGSize(width: 600, height: 600)
                 imageManger.requestImage(for: selectedAsset, targetSize: targetSize, contentMode: .default, options: nil) { (image, info) in
+                    if let image = image {
+                    cell.HeaderPhotoImage.image = nil
                     cell.HeaderPhotoImage.image = image
-                    
+                    }
                 }
             }
         }
@@ -180,4 +125,87 @@ extension PhotoSelectorController{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 1, left: 0, bottom: 0, right: 0)
     }
+}
+
+
+
+
+
+
+
+
+//MARK:- Private functions
+extension PhotoSelectorController{
+   
+    //fetch local photos method
+    fileprivate func fetchPhotos(){
+        showActivityIndicator()
+        DispatchQueue.global(qos: .background).async {
+        let fetchOptions = PHFetchOptions()
+        let allPhotos = PHAsset.fetchAssets(with:.image , options: fetchOptions)
+        allPhotos.enumerateObjects { (asset, count, stop) in
+            let imageManager = PHImageManager.default()
+            let targetSize = CGSize(width: 10, height: 10)
+            let options = PHImageRequestOptions()
+            let sortDiscriptors = NSSortDescriptor(key: "creationDate", ascending: false)
+            fetchOptions.sortDescriptors = [sortDiscriptors]
+            options.isSynchronous = true
+            imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options) { (image, info) in
+                if let image = image {
+                    self.images.append(image)
+                    self.assets.append(asset)
+                    
+//                    if self.selectedImage == nil {
+                        self.selectedImage = self.images.last
+//                    }
+                }
+                if count == allPhotos.count - 1 {
+                    DispatchQueue.main.async {
+                        self.hideActivityIndicator()
+                        
+                        self.collectionView.reloadData()
+                    }
+                }
+            }
+        }
+        }
+
+    }
+    
+    
+    
+    fileprivate func registerCells(){
+        self.collectionView!.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: "cellId")
+        self.collectionView.register(PhotoSelectorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
+    }
+    
+    fileprivate func setupNavigationButton(){
+        navigationController?.navigationBar.tintColor = .black
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handelCancel))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handelNext))
+    }
+    
+    
+    @objc fileprivate func handelCancel(){
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func handelNext(){
+        SharePhotoController.selectedImage = header?.HeaderPhotoImage.image
+        navigationController?.pushViewController(SharePhotoController(), animated: true)
+    }
+    
+    
+    fileprivate func showActivityIndicator() {
+         activityView = UIActivityIndicatorView(style: .gray)
+         activityView?.center = self.view.center
+         self.view.addSubview(activityView!)
+         activityView?.startAnimating()
+     }
+     
+    fileprivate func hideActivityIndicator(){
+         if (activityView != nil){
+             activityView?.stopAnimating()
+         }
+     }
 }

@@ -12,6 +12,13 @@ import Firebase
 class MainTabBarController: UITabBarController {
 
     
+
+   
+    
+    
+    
+    
+    
     //MARK:- IBOutlets
     @IBOutlet weak var mainTabBar: UITabBar!
     override func viewDidLoad() {
@@ -57,6 +64,8 @@ extension MainTabBarController{
         
     }
 
+         
+
 }
 
 
@@ -68,10 +77,12 @@ extension MainTabBarController: UITabBarControllerDelegate{
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         let index = viewControllers?.firstIndex(of: viewController)
         if index == 2{
+       
             let layout = UICollectionViewFlowLayout()
             let photoSelectorController = PhotoSelectorController(collectionViewLayout: layout)
             let nav = UINavigationController(rootViewController: photoSelectorController)
             nav.modalPresentationStyle = .fullScreen
+            
             present(nav, animated: true, completion: nil)
             
             

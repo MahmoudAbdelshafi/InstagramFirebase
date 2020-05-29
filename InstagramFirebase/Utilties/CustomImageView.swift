@@ -38,3 +38,4 @@ class CustomImageView: UIImageView {
         }.resume()
     }
 }
+

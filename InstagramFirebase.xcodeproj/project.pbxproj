@@ -102,10 +102,6 @@
 			isa = PBXGroup;
 			children = (
 				39136FB0247062F7009162F5 /* HomeController.swift */,
-				3982E9C9247EB9E600BE99E6 /* CommentsController.swift */,
-				3982E9D624813EB400BE99E6 /* CommentInputAccessoryView.swift */,
-				3982E9D82481644B00BE99E6 /* CommentInputTextView.swift */,
-				3982E9CD247F29E700BE99E6 /* CommentCell.swift */,
 				3982E9D524803F6D00BE99E6 /* HomePostCell */,
 			);
 			path = Home;
@@ -148,6 +144,35 @@
 				3982E9D124803F6700BE99E6 /* HomePostCell.swift */,
 			);
 			path = HomePostCell;
+			sourceTree = "<group>";
+		};
+		3982E9DA24819A2500BE99E6 /* Comments */ = {
+			isa = PBXGroup;
+			children = (
+				3982E9C9247EB9E600BE99E6 /* CommentsController.swift */,
+				3982E9D624813EB400BE99E6 /* CommentInputAccessoryView.swift */,
+				3982E9D82481644B00BE99E6 /* CommentInputTextView.swift */,
+				3982E9CD247F29E700BE99E6 /* CommentCell.swift */,
+			);
+			path = Comments;
+			sourceTree = "<group>";
+		};
+		3982E9DB24819A5F00BE99E6 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				395A848C246998F500B7E806 /* MainTabBarController.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		3982E9DC24819A7A00BE99E6 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				39FE695824682B070009E1D8 /* Main.storyboard */,
+				39FE695B24682B0D0009E1D8 /* Assets.xcassets */,
+				39FE695D24682B0D0009E1D8 /* LaunchScreen.storyboard */,
+			);
+			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
 		39B6DA192469FD6D008CA0C3 /* Login */ = {
@@ -201,19 +226,18 @@
 		39FE695124682B070009E1D8 /* InstagramFirebase */ = {
 			isa = PBXGroup;
 			children = (
+				39FE695224682B070009E1D8 /* AppDelegate.swift */,
+				39E0481D246F410600CF39D3 /* Model */,
+				39FE69662468412D0009E1D8 /* Utilties */,
 				3982E9C0247D374300BE99E6 /* Camera */,
 				3982E9BB247ACDAD00BE99E6 /* Search */,
+				3982E9DA24819A2500BE99E6 /* Comments */,
 				39136FAF247062DB009162F5 /* Home */,
-				39E0481D246F410600CF39D3 /* Model */,
 				39D35FAA246AF10D004A5E35 /* AddPhoto */,
 				39B6DA192469FD6D008CA0C3 /* Login */,
 				395A84922469AFE700B7E806 /* UserProfile */,
-				39FE69662468412D0009E1D8 /* Utilties */,
-				395A848C246998F500B7E806 /* MainTabBarController.swift */,
-				39FE695824682B070009E1D8 /* Main.storyboard */,
-				39FE695224682B070009E1D8 /* AppDelegate.swift */,
-				39FE695B24682B0D0009E1D8 /* Assets.xcassets */,
-				39FE695D24682B0D0009E1D8 /* LaunchScreen.storyboard */,
+				3982E9DB24819A5F00BE99E6 /* TabBar */,
+				3982E9DC24819A7A00BE99E6 /* SupportingFiles */,
 				39FE696024682B0D0009E1D8 /* Info.plist */,
 				39FE6969246844870009E1D8 /* GoogleService-Info.plist */,
 			);

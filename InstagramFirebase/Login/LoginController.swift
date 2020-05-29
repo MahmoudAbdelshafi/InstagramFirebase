@@ -12,6 +12,10 @@ import Firebase
 class LoginController: UIViewController {
     
     
+    
+    //MARK:-Properties
+    var activityView: UIActivityIndicatorView?
+    
     //MARK:- IBOutlets
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -20,7 +24,10 @@ class LoginController: UIViewController {
     
     
     
-    
+    let activityIndicator :UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        return indicator
+    }()
     
     
     override func viewDidLoad() {
@@ -29,12 +36,13 @@ class LoginController: UIViewController {
         setupUI()
         handelTextInputChange()
         hideKeyboardWhenTappedAround()
-        
+                
     }
     
     
     @IBAction func textFields(_ sender: Any) {
         handelTextInputChange()
+        
     }
     
     @IBAction func signInPressed(_ sender: Any) {
@@ -57,12 +65,18 @@ extension LoginController{
     fileprivate func HandelLogIn(){
         guard let email = emailTextField.text, email.count > 0 else {return}
         guard let password = passwordTextField.text, password.count > 0 else {return}
+        signInButton.isEnabled = false
+        showActivityIndicator()
         Auth.auth().signIn(withEmail: email, password: password) { (auth, error) in
             if let err = error{
                 print("Error Signing in", err)
+                self.signInButton.isEnabled = true
+                self.hideActivityIndicator()
                 return
             }
             print("Sign In Succeded")
+            self.signInButton.isEnabled = true
+            self.hideActivityIndicator()
             let mainTabBarController = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBarController") as? MainTabBarController
             UIApplication.shared.keyWindow?.rootViewController = mainTabBarController
             self.dismiss(animated: true, completion: nil)
@@ -90,4 +104,20 @@ extension LoginController{
             signInButton.backgroundColor = #colorLiteral(red: 0, green: 0.4705882353, blue: 0.6862745098, alpha: 1)
         }
     }
+    
+    
+    
+       fileprivate func showActivityIndicator() {
+           activityView = UIActivityIndicatorView(style: .gray)
+           activityView?.center = self.view.center
+           self.view.addSubview(activityView!)
+           activityView?.startAnimating()
+       }
+       
+      fileprivate func hideActivityIndicator(){
+           if (activityView != nil){
+               activityView?.stopAnimating()
+           }
+       }
+      
 }

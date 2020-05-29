@@ -19,13 +19,19 @@ class UserProfileHeader: UICollectionReusableView {
     
     //MARK:- Properties
     var delegate:UserProfileHeaderDelegate?
-    var numberOfPosts = String()
+    var numberOfPosts:Int? {
+        didSet{
+            awakeFromNib().self
+        }
+    }
+    
     var user:User?{
         didSet{
             guard let imageUrl = user?.profileImageUrl else { return }
             userImage.loadImage(urlString: imageUrl)
             userLabel.text = user?.username
             setupEditProfileButton()
+
         }
     }
     
@@ -44,6 +50,7 @@ class UserProfileHeader: UICollectionReusableView {
    
     override func awakeFromNib() {
         setupUI()
+        
     }
     
     
@@ -92,6 +99,8 @@ extension UserProfileHeader{
         bookMarkButton.tintColor = #colorLiteral(red: 0, green: 0.4705882353, blue: 0.6862745098, alpha: 1)
     }
     
+    
+ 
     
     
     fileprivate func setupEditProfileButton(){
@@ -175,7 +184,7 @@ extension UserProfileHeader{
     
     //Labels Attributes
     fileprivate func setupTextLabelAttributes(){
-        let attributedText = NSMutableAttributedString(string: "\(numberOfPosts)", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
+        let attributedText = NSMutableAttributedString(string: "\(numberOfPosts ?? 0)\n", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
         attributedText.append(NSMutableAttributedString(string: "Posts", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),NSAttributedString.Key.foregroundColor : UIColor.lightGray]))
         postsLabel.attributedText = attributedText
         

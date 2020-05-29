@@ -17,13 +17,14 @@ class HomeController: UIViewController {
     
     //MARK:- Properties
     var posts = [Post]()
+    var activityView: UIActivityIndicatorView?
     
     
     
     //MARK:- IBOutlets
     @IBOutlet weak var homeCollectionView: UICollectionView!
     
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         let name = NSNotification.Name(rawValue: "UpdateFeed")
@@ -36,6 +37,12 @@ class HomeController: UIViewController {
         let cell = UINib(nibName: "HomePostCell", bundle: nil)
         homeCollectionView.register(cell, forCellWithReuseIdentifier: "HomePostCell")
        
+        
+        
+            
+            
+        
+        
         
         
     }
@@ -95,7 +102,7 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let height:CGFloat = 186 + view.frame.width
+        let height:CGFloat = 200 + view.frame.width
         return CGSize(width: view.frame.width, height: height)
     }
     
@@ -154,6 +161,7 @@ extension HomeController{
     }
     
     fileprivate func fetchPostsWithUser(_ user:User){
+        showActivityIndicator()
         let ref = Database.database().reference().child("posts").child(user.uid)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             self.homeCollectionView.refreshControl?.endRefreshing()
@@ -177,8 +185,10 @@ extension HomeController{
                     self.posts.sort { (p1, p2) -> Bool in
                         return p1.creationDate!.compare(p2.creationDate!) == .orderedDescending
                     }
+                    self.hideActivityIndicator()
                     self.homeCollectionView.reloadData()
                 }) { (error) in
+                     self.hideActivityIndicator()
                     print("failled to fetch like info for posts",error)
                 }
                 
@@ -187,6 +197,23 @@ extension HomeController{
            
         }) { (err) in
             print("err",err)
+             self.hideActivityIndicator()
         }
     }
+    
+    
+    
+
+     fileprivate func showActivityIndicator() {
+         activityView = UIActivityIndicatorView(style: .gray)
+         activityView?.center = self.view.center
+         self.view.addSubview(activityView!)
+         activityView?.startAnimating()
+     }
+     
+    fileprivate func hideActivityIndicator(){
+         if (activityView != nil){
+             activityView?.stopAnimating()
+         }
+     }
 }

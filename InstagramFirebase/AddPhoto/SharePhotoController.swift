@@ -15,6 +15,7 @@ class SharePhotoController:UIViewController{
     //MARK:- Properties
     static var selectedImage: UIImage?
     let image = SharePhotoController.selectedImage
+    var activityView: UIActivityIndicatorView?
     
     
     
@@ -76,18 +77,21 @@ extension SharePhotoController{
     
     //Database method
     fileprivate func saveToStorage(){
+        showActivityIndicator()
         guard let image = imageView.image else {return}
         navigationItem.rightBarButtonItem?.isEnabled = false
         guard let uploadData = image.jpegData(compressionQuality: 0.5) else {return}
         let filename = NSUUID().uuidString
         Storage.storage().reference().child("posts").child(filename).putData(uploadData, metadata: nil) { (metadata, error) in
             if let error = error{
+                self.hideActivityIndicator()
                 print(error)
                 return
             }
             print("post saved to storage")
             Storage.storage().reference().child("posts").child(filename).downloadURL { (url, error) in
                 if let err = error {
+                    self.hideActivityIndicator()
                     print(err.localizedDescription)
                 }
                 let imageURL = url?.absoluteString
@@ -108,13 +112,27 @@ extension SharePhotoController{
         ref.updateChildValues(values) { (error, ref) in
             if let error = error{
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
+                 self.hideActivityIndicator()
                 print("Can't save to database",error)
             }
+             self.hideActivityIndicator()
             self.dismiss(animated: true, completion: nil)
             print("post saved to Database")
             let name = NSNotification.Name(rawValue: "UpdateFeed")
             NotificationCenter.default.post(name: name, object: nil)
         }
     }
-    
+    fileprivate func showActivityIndicator() {
+         activityView = UIActivityIndicatorView(style: .gray)
+         activityView?.center = self.view.center
+         self.view.addSubview(activityView!)
+         activityView?.startAnimating()
+     }
+     
+    fileprivate func hideActivityIndicator(){
+         if (activityView != nil){
+             activityView?.stopAnimating()
+         }
+     }
+
 }
