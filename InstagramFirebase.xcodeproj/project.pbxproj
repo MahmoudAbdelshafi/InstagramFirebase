@@ -25,6 +25,8 @@
 		3982E9D0247F532300BE99E6 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982E9CF247F532300BE99E6 /* Comment.swift */; };
 		3982E9D324803F6700BE99E6 /* HomePostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982E9D124803F6700BE99E6 /* HomePostCell.swift */; };
 		3982E9D424803F6700BE99E6 /* HomePostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3982E9D224803F6700BE99E6 /* HomePostCell.xib */; };
+		3982E9D724813EB400BE99E6 /* CommentInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982E9D624813EB400BE99E6 /* CommentInputAccessoryView.swift */; };
+		3982E9D92481644C00BE99E6 /* CommentInputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982E9D82481644B00BE99E6 /* CommentInputTextView.swift */; };
 		39B6DA1B2469FDA1008CA0C3 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B6DA1A2469FDA1008CA0C3 /* LoginController.swift */; };
 		39C713CF246BBF1A00CE3BE0 /* SharePhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C713CE246BBF1A00CE3BE0 /* SharePhotoController.swift */; };
 		39D35FAC246AF15F004A5E35 /* PhotoSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D35FAB246AF15F004A5E35 /* PhotoSelectorController.swift */; };
@@ -62,6 +64,8 @@
 		3982E9CF247F532300BE99E6 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		3982E9D124803F6700BE99E6 /* HomePostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostCell.swift; sourceTree = "<group>"; };
 		3982E9D224803F6700BE99E6 /* HomePostCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomePostCell.xib; sourceTree = "<group>"; };
+		3982E9D624813EB400BE99E6 /* CommentInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputAccessoryView.swift; sourceTree = "<group>"; };
+		3982E9D82481644B00BE99E6 /* CommentInputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputTextView.swift; sourceTree = "<group>"; };
 		39B6DA1A2469FDA1008CA0C3 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		39C713CE246BBF1A00CE3BE0 /* SharePhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePhotoController.swift; sourceTree = "<group>"; };
 		39D35FAB246AF15F004A5E35 /* PhotoSelectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorController.swift; sourceTree = "<group>"; };
@@ -99,6 +103,8 @@
 			children = (
 				39136FB0247062F7009162F5 /* HomeController.swift */,
 				3982E9C9247EB9E600BE99E6 /* CommentsController.swift */,
+				3982E9D624813EB400BE99E6 /* CommentInputAccessoryView.swift */,
+				3982E9D82481644B00BE99E6 /* CommentInputTextView.swift */,
 				3982E9CD247F29E700BE99E6 /* CommentCell.swift */,
 				3982E9D524803F6D00BE99E6 /* HomePostCell */,
 			);
@@ -374,10 +380,12 @@
 				395A84912469AF1800B7E806 /* UserProfileCollectionViewCell.swift in Sources */,
 				3982E9CE247F29E700BE99E6 /* CommentCell.swift in Sources */,
 				39C713CF246BBF1A00CE3BE0 /* SharePhotoController.swift in Sources */,
+				3982E9D92481644C00BE99E6 /* CommentInputTextView.swift in Sources */,
 				39B6DA1B2469FDA1008CA0C3 /* LoginController.swift in Sources */,
 				3982E9C8247DD20700BE99E6 /* CustomAnimationDismisser.swift in Sources */,
 				3982E9BA247ACA7000BE99E6 /* FirebaseUtilties.swift in Sources */,
 				395A848F24699AD200B7E806 /* UserProfileController.swift in Sources */,
+				3982E9D724813EB400BE99E6 /* CommentInputAccessoryView.swift in Sources */,
 				39FE695324682B070009E1D8 /* AppDelegate.swift in Sources */,
 				3982E9C4247D727500BE99E6 /* PerviewPhotoContinaerView.swift in Sources */,
 				39D6AC3F246BAE6B0048F093 /* PhotoSelectorHeader.swift in Sources */,

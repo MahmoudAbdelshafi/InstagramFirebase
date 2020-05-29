@@ -13,7 +13,9 @@ import Firebase
 
 
 
-class CommentsController: UICollectionViewController {
+class CommentsController: UICollectionViewController,CommentInputAccessoryViewDelegate {
+   
+    
    
     
     
@@ -50,47 +52,38 @@ class CommentsController: UICollectionViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
+        continerView?.removeFromSuperview()
     }
     
     
     
     //Comments ContinerView
-    lazy var continerView: UIView? = {
-        let continerView = UIView()
-        continerView.backgroundColor = .white
-      
-     continerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.safeAreaInsets.bottom  + 50 )
-        
-        let submitButton = UIButton(type: .system)
-        submitButton.setTitle("Submit", for: .normal)
-        submitButton.setTitleColor(.black, for: .normal)
-        submitButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        submitButton.addTarget(self, action: #selector(handelSubmit), for: .touchUpInside)
-        continerView.addSubview(submitButton)
-        submitButton.anchor(top: continerView.topAnchor, left: nil, bottom: continerView.bottomAnchor, right: continerView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: view.safeAreaInsets.bottom, paddingRight: 12, width: 50, height: 0 )
-        
-      
-        
-        continerView.addSubview(commentTextField)
-        commentTextField.anchor(top: continerView.topAnchor, left: continerView.leftAnchor, bottom: continerView.bottomAnchor, right: submitButton.leftAnchor , paddingTop: 8, paddingLeft: 12, paddingBottom: view.safeAreaInsets.bottom, paddingRight: 8, width: 0, height: 0)
-        
-        let lineSeparatorView = UIView()
-        lineSeparatorView.backgroundColor = UIColor.rgb(red: 230, green: 230, blue: 230 )
-        continerView.addSubview(lineSeparatorView)
-        lineSeparatorView.anchor(top: continerView.topAnchor, left: continerView.leftAnchor, bottom: nil, right: continerView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0.5)
-        return continerView
+    lazy var continerView: CommentInputAccessoryView? = {
+        let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+        let commentInputAccessoryView = CommentInputAccessoryView(frame: frame)
+        commentInputAccessoryView.delegate = self
+        return commentInputAccessoryView
+  
     }()
+    func didSubmit(for comment: String) {
+        let postID = post?.id ?? ""
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let values = ["text":comment, "creationDate": Date().timeIntervalSince1970,"uid":uid] as [String : Any]
+        Database.database().reference().child("comments").child(postID).childByAutoId().updateChildValues(values) { (error, ref) in
+            if let err = error{
+                print(err , "error submitting comment")
+            }
+            print("comment successfully submitted")
+            self.continerView?.clearCommentTextFiled()
+        }
+       }
     
-    let commentTextField:UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Enter Comment"
-        return textField
-    }()
+  
     
     
     override var inputAccessoryView: UIView?{
         get{
-            continerView?.autoresizingMask = .flexibleHeight
+         
             return continerView
         }
     }
@@ -144,19 +137,7 @@ extension CommentsController:UICollectionViewDelegateFlowLayout{
 
 //MARK:- Private Functions
 extension CommentsController {
-   @objc fileprivate func handelSubmit(){
-   let postID = post?.id ?? ""
-    guard let comment = commentTextField.text else {return}
-    guard let uid = Auth.auth().currentUser?.uid else {return}
-    let values = ["text":comment, "creationDate": Date().timeIntervalSince1970,"uid":uid] as [String : Any]
-    Database.database().reference().child("comments").child(postID).childByAutoId().updateChildValues(values) { (error, ref) in
-        if let err = error{
-            print(err , "error submitting comment")
-        }
-        print("comment successfully submitted")
-    }
-    }
-    
+
     fileprivate func fetchComments(){
         guard let postId = self.post?.id else { return}
     let ref = Database.database().reference().child("comments").child(postId)

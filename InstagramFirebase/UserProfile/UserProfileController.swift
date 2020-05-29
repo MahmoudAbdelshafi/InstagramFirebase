@@ -115,7 +115,7 @@ extension UserProfileController : UICollectionViewDataSource, UICollectionViewDe
             let width = (view.frame.width - 2) / 3
             return CGSize(width: width, height: width)
         }else{
-            let height:CGFloat = 186 + view.frame.width
+            let height:CGFloat = 250 + view.frame.width
             return CGSize(width: view.frame.width, height: height)
         }
     }

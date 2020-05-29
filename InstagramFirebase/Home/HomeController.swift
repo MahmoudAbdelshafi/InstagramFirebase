@@ -127,7 +127,7 @@ extension HomeController{
     }
     
     @objc fileprivate func handelRefresh(){
-        posts.removeAll()
+        
         fetchAllPosts()
     }
     
@@ -158,6 +158,7 @@ extension HomeController{
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             self.homeCollectionView.refreshControl?.endRefreshing()
             guard let dictionaries = snapshot.value as? [String:Any] else {return}
+            self.posts.removeAll()
             dictionaries.forEach { (key,value) in
                 guard let dictionary = value as? [String: Any] else{ return}
                 var post = Post(user: user, dictionary: dictionary)
@@ -169,6 +170,9 @@ extension HomeController{
                     }else{
                         post.hasLiked = false
                     }
+                
+                        
+                    
                     self.posts.append(post)
                     self.posts.sort { (p1, p2) -> Bool in
                         return p1.creationDate!.compare(p2.creationDate!) == .orderedDescending

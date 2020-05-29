@@ -29,6 +29,7 @@ class CommentCell: UICollectionViewCell {
     let textView:UITextView = {
         let textView = UITextView()
         textView.font = UIFont.systemFont(ofSize: 14)
+        textView.isEditable = false
         textView.isScrollEnabled = false
    
         
