@@ -40,8 +40,10 @@ class UserProfileController: UIViewController {
         userCollectionView.register(cell, forCellWithReuseIdentifier: "HomePostCell")
         fetchUser()
         
-    
     }
+    
+    
+    
     
     
     //MARK:- IBActions
@@ -99,6 +101,7 @@ extension UserProfileController : UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         if indexPath.item == self.posts.count - 1 && !isFinishedPagining{
             paginatePosts()
         }
@@ -106,10 +109,12 @@ extension UserProfileController : UICollectionViewDataSource, UICollectionViewDe
         
         if isGridView{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! UserProfileCollectionViewCell
+            cell.userImage.image = nil
             cell.post = posts[indexPath.item]
             return cell
         }else{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePostCell", for: indexPath) as! HomePostCell
+            cell.photoImageView.image = nil
             cell.post = posts[indexPath.item]
             return cell
         }
@@ -176,7 +181,7 @@ extension UserProfileController{
 //
 //            }
             self.hideActivityIndicator()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.userCollectionView.reloadData()
             }
         }) { (error) in

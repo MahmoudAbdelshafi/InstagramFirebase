@@ -56,7 +56,11 @@ class UserProfileHeader: UICollectionReusableView {
     
     //MARK:- IBActions
     @IBAction func editProfilePressed(_ sender: Any) {
+        guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else {return}
+        guard let userId = user?.uid else {return}
+        if currentLoggedInUserId != userId{
         handelEditProfileOrFollow()
+    }
     }
     @IBAction func gridPressed(_ sender: Any) {
         handelChangeToGrid()

@@ -15,6 +15,7 @@ class LoginController: UIViewController {
     
     //MARK:-Properties
     var activityView: UIActivityIndicatorView?
+    @IBOutlet var keyboardHeightLayoutConstraint: NSLayoutConstraint?
     
     //MARK:- IBOutlets
     @IBOutlet weak var emailTextField: UITextField!
@@ -37,6 +38,14 @@ class LoginController: UIViewController {
         handelTextInputChange()
         hideKeyboardWhenTappedAround()
                 
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(sender:)), name: UIResponder.keyboardWillShowNotification, object: nil);
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(sender:)), name: UIResponder.keyboardWillHideNotification, object: nil);
+        
+        
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     
@@ -120,4 +129,21 @@ extension LoginController{
            }
        }
       
+    
+
+   
+        
+     //MARK: Moving Up the View When keyboard is active
+    @objc func keyboardWillShow(sender: NSNotification) {
+        if self.view.frame.height < 667{
+         self.view.frame.origin.y = -150
+        }
+    }
+
+    @objc func keyboardWillHide(sender: NSNotification) {
+         self.view.frame.origin.y = 0 
+    }
+    
+    
+    
 }

@@ -93,7 +93,7 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePostCell", for: indexPath) as! HomePostCell
-        
+        cell.photoImageView.image = nil
         cell.post = posts[indexPath.item]
         cell.delegate = self
         return cell
