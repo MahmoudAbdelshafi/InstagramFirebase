@@ -176,7 +176,9 @@ extension UserProfileController{
 //
 //            }
             self.hideActivityIndicator()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             self.userCollectionView.reloadData()
+            }
         }) { (error) in
             print("Pagining Error",error)
             self.hideActivityIndicator()
@@ -212,8 +214,9 @@ extension UserProfileController{
         }) { (error) in
             print("failled to get posts",error)
         }
+         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
         self.userCollectionView.reloadData()
-      
+        }
     }
     
     

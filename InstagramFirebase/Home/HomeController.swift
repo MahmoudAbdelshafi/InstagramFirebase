@@ -64,7 +64,6 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
     func didLike(for cell: HomePostCell) {
         guard let indexPath = homeCollectionView.indexPath(for:cell) else {return}
         var post = self.posts[indexPath.item]
-        print(post)
         guard let postId = post.id else {return}
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let values = [uid:post.hasLiked == true ? 0:1]
@@ -129,12 +128,13 @@ extension HomeController{
     
     
     fileprivate func fetchAllPosts(){
+        showActivityIndicator()
         fetchPosts()
         fetchFollowingUserIds()
     }
     
     @objc fileprivate func handelRefresh(){
-        
+       
         fetchAllPosts()
     }
     
@@ -161,18 +161,22 @@ extension HomeController{
     }
     
     fileprivate func fetchPostsWithUser(_ user:User){
-        showActivityIndicator()
+        
         let ref = Database.database().reference().child("posts").child(user.uid)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
+           
             self.homeCollectionView.refreshControl?.endRefreshing()
             guard let dictionaries = snapshot.value as? [String:Any] else {return}
-            self.posts.removeAll()
+             self.posts.removeAll()
+            self.homeCollectionView.reloadData()
             dictionaries.forEach { (key,value) in
                 guard let dictionary = value as? [String: Any] else{ return}
                 var post = Post(user: user, dictionary: dictionary)
                 post.id = key
                 guard let uid = Auth.auth().currentUser?.uid else {return}
                 Database.database().reference().child("likes").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                     
+                    self.hideActivityIndicator()
                     if let value = snapshot.value as? Int ,value == 1{
                         post.hasLiked = true
                     }else{
@@ -180,25 +184,31 @@ extension HomeController{
                     }
                 
                         
-                    
+                     
                     self.posts.append(post)
+                    
                     self.posts.sort { (p1, p2) -> Bool in
+                        
                         return p1.creationDate!.compare(p2.creationDate!) == .orderedDescending
+                        
                     }
                     self.hideActivityIndicator()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     self.homeCollectionView.reloadData()
+                    }
                 }) { (error) in
                      self.hideActivityIndicator()
                     print("failled to fetch like info for posts",error)
                 }
                 
             }
-          
+         
            
         }) { (err) in
             print("err",err)
              self.hideActivityIndicator()
         }
+     
     }
     
     
@@ -212,8 +222,10 @@ extension HomeController{
      }
      
     fileprivate func hideActivityIndicator(){
+        
          if (activityView != nil){
              activityView?.stopAnimating()
+            
          }
      }
 }
