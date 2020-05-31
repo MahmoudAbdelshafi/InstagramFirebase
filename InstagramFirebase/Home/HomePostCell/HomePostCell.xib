@@ -17,7 +17,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="375" height="413"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Cxo-cd-wDs" customClass="CustomImageView" customModule="InstagramFirebase" customModuleProvider="target">
+                    <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Cxo-cd-wDs" customClass="CustomImageView" customModule="InstagramFirebase" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="56" width="375" height="307"/>
                     </imageView>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zAs-Td-5In" customClass="CustomImageView" customModule="InstagramFirebase" customModuleProvider="target">
@@ -82,6 +82,13 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heartIcon" translatesAutoresizingMaskIntoConstraints="NO" id="rMR-gC-7ue">
+                        <rect key="frame" x="187.5" y="209.5" width="0.0" height="0.0"/>
+                        <constraints>
+                            <constraint firstAttribute="width" id="BD6-uY-7Pe"/>
+                            <constraint firstAttribute="width" secondItem="rMR-gC-7ue" secondAttribute="height" id="Ubn-tz-XNZ"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="Cxo-cd-wDs" firstAttribute="top" secondItem="Wsi-lU-sop" secondAttribute="bottom" id="3YB-lm-ELf"/>
@@ -96,8 +103,10 @@
                     <constraint firstAttribute="trailing" secondItem="yNc-89-mJS" secondAttribute="trailing" id="Rp5-G5-1rH"/>
                     <constraint firstItem="yNc-89-mJS" firstAttribute="top" secondItem="Cxo-cd-wDs" secondAttribute="bottom" id="SAd-cx-JYA"/>
                     <constraint firstItem="Ils-hA-rZB" firstAttribute="leading" secondItem="zAs-Td-5In" secondAttribute="trailing" constant="8" id="V9D-YP-vU8"/>
+                    <constraint firstItem="rMR-gC-7ue" firstAttribute="centerY" secondItem="Cxo-cd-wDs" secondAttribute="centerY" id="WaC-Nu-jaN"/>
                     <constraint firstItem="zAs-Td-5In" firstAttribute="leading" secondItem="jOu-44-2Bg" secondAttribute="leading" constant="8" id="YUN-RS-2Fp"/>
                     <constraint firstItem="Wsi-lU-sop" firstAttribute="leading" secondItem="Ils-hA-rZB" secondAttribute="trailing" constant="10" id="be4-B6-jVm"/>
+                    <constraint firstItem="rMR-gC-7ue" firstAttribute="centerX" secondItem="Cxo-cd-wDs" secondAttribute="centerX" id="fI2-aT-xEA"/>
                     <constraint firstItem="Cxo-cd-wDs" firstAttribute="top" secondItem="zAs-Td-5In" secondAttribute="bottom" constant="8" id="g4p-g0-LzH"/>
                     <constraint firstItem="hwi-nv-mlP" firstAttribute="leading" secondItem="jOu-44-2Bg" secondAttribute="leading" constant="8" id="jHK-ki-rNq"/>
                     <constraint firstItem="Ils-hA-rZB" firstAttribute="centerY" secondItem="zAs-Td-5In" secondAttribute="centerY" id="nKL-5B-2JT"/>
@@ -111,6 +120,8 @@
                 <outlet property="captionLabel" destination="hwi-nv-mlP" id="NKA-w7-AVC"/>
                 <outlet property="commentButton" destination="HDi-8P-K2e" id="91a-cr-K6d"/>
                 <outlet property="likeButton" destination="VKE-N8-USH" id="1JD-Cj-NKS"/>
+                <outlet property="likeImageView" destination="rMR-gC-7ue" id="5pG-b6-PSx"/>
+                <outlet property="likeImageViewWidthConstraint" destination="BD6-uY-7Pe" id="Ljo-uJ-SWg"/>
                 <outlet property="optionButton" destination="Wsi-lU-sop" id="qaN-wW-mx6"/>
                 <outlet property="photoImageView" destination="Cxo-cd-wDs" id="XZV-fJ-8rI"/>
                 <outlet property="sendMessageButton" destination="FGn-rT-nsH" id="rNP-zq-Bgf"/>
@@ -122,6 +133,7 @@
     </objects>
     <resources>
         <image name="comment" width="22" height="19"/>
+        <image name="heartIcon" width="100" height="100"/>
         <image name="like_unselected" width="22" height="18.5"/>
         <image name="ribbon" width="18.5" height="26"/>
         <image name="send2" width="22" height="19.5"/>

@@ -32,8 +32,19 @@ class HomePostCell: UICollectionViewCell {
         }
     }
     
+    
+    
+   
+    
+    
+    
+    
+    
+    
     @IBOutlet weak var photoImageView: CustomImageView!
     @IBOutlet weak var userPhotoImageView: CustomImageView!
+    @IBOutlet weak var likeImageView: UIImageView!
+    @IBOutlet weak var likeImageViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var optionButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
@@ -43,9 +54,22 @@ class HomePostCell: UICollectionViewCell {
     @IBOutlet weak var captionLabel: UILabel!
     
     
+    
+    
+    //MARK: UITap Recognizer
+       lazy var homePostLikeAnimator = HomePostLikeAnimator(container: self.contentView, layoutConstraint: self.likeImageViewWidthConstraint)
+       lazy var doubleTapRecognizer:UITapGestureRecognizer = {
+           let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didDoubleTap))
+           tapRecognizer.numberOfTapsRequired = 2
+           return tapRecognizer
+       }()
+    
+    
+    
     override func awakeFromNib() {
-       
+        super.awakeFromNib()
         setupUI()
+        photoImageView.addGestureRecognizer(doubleTapRecognizer)
     }
     @IBAction func commentPressed(_ sender: Any) {
         handelComment()
@@ -88,4 +112,15 @@ extension HomePostCell{
         delegate?.didTapComment(post: post)
         
        }
+    
+    //Handel recognizer
+    @objc func didDoubleTap(){
+         homePostLikeAnimator.animate {
+            let likedImage = UIImage(named: "likephoto_selected")
+            if self.likeButton.imageView?.image != likedImage{
+            self.handelLike()
+            }
+         }
+         
+     }
 }

@@ -75,7 +75,8 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
             print("like submitted")
             post.hasLiked = !post.hasLiked
             self.posts[indexPath.item] = post
-            self.homeCollectionView.reloadItems(at: [indexPath])
+            self.homeCollectionView.reloadData()
+            //self.homeCollectionView.reloadItems(at: [indexPath])
            
         }
     }

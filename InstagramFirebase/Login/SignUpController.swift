@@ -195,7 +195,7 @@ extension SignUpController: UIImagePickerControllerDelegate{
     //MARK: Moving Up the View When keyboard is active
     @objc func keyboardWillShow(sender: NSNotification) {
           if self.view.frame.height < 667{
-            self.view.frame.origin.y = -170
+            self.view.frame.origin.y = -180
           }else{
             self.view.frame.origin.y = -80
         }
