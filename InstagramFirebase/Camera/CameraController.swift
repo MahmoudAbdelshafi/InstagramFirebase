@@ -16,16 +16,16 @@ class CameraController: UIViewController,AVCapturePhotoCaptureDelegate, UIViewCo
     let output = AVCapturePhotoOutput()
     
     let dismissButton:UIButton = {
-           let button = UIButton(type: .system)
-           let image = UIImage(named: "right_arrow_shadow")
-           button.setImage(image, for: .normal)
-           button.addTarget(self, action: #selector(handelDismissButton), for: .touchUpInside)
-           return button
-       }()
+        let button = UIButton(type: .system)
+        var image = UIImage(named: "right_arrow_shadow")
+        button.setImage(image, for: .normal)
+        button.addTarget(self, action: #selector(handelDismissButton), for: .touchUpInside)
+        return button
+    }()
     
     let capturePhotoButton:UIButton = {
         let button = UIButton(type: .system)
-        let image = UIImage(named: "capture_photo")
+        let image = UIImage(named: "capturephoto")
         button.setImage(image, for: .normal)
         button.addTarget(self, action: #selector(handelCapturePhoto), for: .touchUpInside)
         return button
@@ -33,10 +33,13 @@ class CameraController: UIViewController,AVCapturePhotoCaptureDelegate, UIViewCo
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupButtonsConstraints()
-        setupCaptureSession()
         transitioningDelegate = self
-     
+           setupCaptureSession()
+    }
+    
+    
+    override func viewDidLayoutSubviews() {
+        setupButtonsConstraints()
     }
     
     
@@ -65,18 +68,29 @@ class CameraController: UIViewController,AVCapturePhotoCaptureDelegate, UIViewCo
 
 //MARK:- Private Functions
 extension CameraController{
+    
+    
     @objc fileprivate func handelDismissButton(){
         dismiss(animated: true, completion: nil)
     }
     
     fileprivate func setupButtonsConstraints(){
+        view.addSubview(dismissButton)
         view.addSubview(capturePhotoButton)
+         
+        
+        
         capturePhotoButton.anchor(top: nil, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 30, paddingRight: 0, width: 80, height: 80)
         capturePhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        view.addSubview(dismissButton)
+       
+        
         dismissButton.anchor(top: view.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, paddingTop: 40, paddingLeft: 0, paddingBottom: 0, paddingRight: 20 , width: 40, height: 40)
         
     }
+    
+    
+    
+    
     @objc fileprivate func handelCapturePhoto(){
         let settings = AVCapturePhotoSettings()
         settings.previewPhotoFormat = settings.embeddedThumbnailPhotoFormat
