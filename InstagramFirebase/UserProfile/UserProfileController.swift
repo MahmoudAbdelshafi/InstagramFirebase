@@ -11,10 +11,6 @@ import Firebase
 
 class UserProfileController: UIViewController {
     
-    
-    
-    
-    
     //MARK:- properties
     var activityView: UIActivityIndicatorView?
     var numberOfPosts = [Post]()
@@ -25,63 +21,39 @@ class UserProfileController: UIViewController {
     var user:User?
     var posts = [Post]()
     
-    
-    
-    
-    
-    
     //MARK:- IBOutlets
     @IBOutlet weak var userCollectionView: UICollectionView!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let cell = UINib(nibName: "HomePostCell", bundle: nil)
         userCollectionView.register(cell, forCellWithReuseIdentifier: "HomePostCell")
         fetchUser()
-        
     }
-    
-    
-    
-    
     
     //MARK:- IBActions
     @IBAction func logOutPressed(_ sender: Any) {
         handelLogOut()
     }
-    
-    
-    
-    
 }
 
-
-    //MARK:- UserHeader Methods
+//MARK:- UserHeader Methods
 extension UserProfileController{
-    
-    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "UserProfileHeader", for: indexPath) as! UserProfileHeader
         header.user = user
         header.delegate = self
         header.numberOfPosts = numberOfPosts.count
-       
         return header
     }
-    
-    
     
     //Header size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let width = view.frame.width
         return CGSize(width: width, height: 200)
     }
-    
 }
-
-
-
 
 //MARK:- User Profile CollectionView Datasource methods
 extension UserProfileController : UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,UserProfileHeaderDelegate{
@@ -105,7 +77,6 @@ extension UserProfileController : UICollectionViewDataSource, UICollectionViewDe
         if indexPath.item == self.posts.count - 1 && !isFinishedPagining{
             paginatePosts()
         }
-        
         
         if isGridView{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! UserProfileCollectionViewCell
@@ -134,25 +105,16 @@ extension UserProfileController : UICollectionViewDataSource, UICollectionViewDe
         return 0
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 1
     }
 }
 
-
-
-
-
-
-
-
-
 //MARK:- Private Functions
 extension UserProfileController{
-     
+    
     fileprivate func paginatePosts(){
-         guard let uid = self.user?.uid else { return }
+        guard let uid = self.user?.uid else { return }
         let ref = Database.database().reference().child("posts").child(uid)
         //var query = ref.queryOrderedByKey()
         var query = ref.queryOrdered(byChild: "creationDate")
@@ -168,7 +130,7 @@ extension UserProfileController{
                 self.isFinishedPagining = true
             }
             if self.posts.count > 0 {
-            allObjects.removeFirst()
+                allObjects.removeFirst()
             }
             guard let user =  self.user else {return}
             allObjects.forEach({ (snapshot) in
@@ -177,12 +139,12 @@ extension UserProfileController{
                 post .id = snapshot.key
                 self.posts.append(post)
             })
-//            self.posts.forEach { (post) in
-//
-//            }
+            //            self.posts.forEach { (post) in
+            //
+            //            }
             self.hideActivityIndicator()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.userCollectionView.reloadData()
+                self.userCollectionView.reloadData()
             }
         }) { (error) in
             print("Pagining Error",error)
@@ -191,19 +153,17 @@ extension UserProfileController{
         
     }
     
-    
-      //get profile image URL from data base
-      fileprivate func fetchUser(){
-          let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
-          Database.fetchUserWithUID(uid: uid) { (user) in
-              self.user = user
-              self.navigationItem.title = user.username
+    //get profile image URL from data base
+    fileprivate func fetchUser(){
+        let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
+        Database.fetchUserWithUID(uid: uid) { (user) in
+            self.user = user
+            self.navigationItem.title = user.username
             self.getPostsNumber()
             self.paginatePosts()
-              //self.fetchOrderdPosts()
-          }
-      }
-      
+            //self.fetchOrderdPosts()
+        }
+    }
     
     //fetchOrderdPosts
     fileprivate func getPostsNumber(){
@@ -212,22 +172,21 @@ extension UserProfileController{
         ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
             guard let dictionary = snapshot.value as? [String:Any] else {return}
             guard let user = self.user else{return}
-                let post = Post(user: user, dictionary: dictionary)
-                 self.numberOfPosts.insert(post, at: 0)
+            let post = Post(user: user, dictionary: dictionary)
+            self.numberOfPosts.insert(post, at: 0)
             print(self.numberOfPosts.count)
-//            self.userCollectionView.reloadData()
+            //            self.userCollectionView.reloadData()
         }) { (error) in
             print("failled to get posts",error)
         }
-         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-        self.userCollectionView.reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.userCollectionView.reloadData()
         }
     }
     
-    
     //Logout Alert
     fileprivate func handelLogOut(){
-       
+        
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { (_) in
             do{
@@ -245,8 +204,6 @@ extension UserProfileController{
         present(alertController, animated: true, completion: nil)
     }
     
-    
-    
     //present LogIn Controller
     fileprivate func presentLogInController(){
         let loginController = storyboard?.instantiateViewController(withIdentifier: "logInController") as! LoginController
@@ -259,25 +216,16 @@ extension UserProfileController{
         }
     }
     
+    fileprivate func showActivityIndicator() {
+        activityView = UIActivityIndicatorView(style: .gray)
+        activityView?.center = self.view.center
+        self.view.addSubview(activityView!)
+        activityView?.startAnimating()
+    }
     
-    
-    
-    
-    
-   fileprivate func showActivityIndicator() {
-       activityView = UIActivityIndicatorView(style: .gray)
-       activityView?.center = self.view.center
-       self.view.addSubview(activityView!)
-       activityView?.startAnimating()
-   }
-   
-  fileprivate func hideActivityIndicator(){
-       if (activityView != nil){
-           activityView?.stopAnimating()
-       }
-   }
-    
-    
-    
-    
+    fileprivate func hideActivityIndicator(){
+        if (activityView != nil){
+            activityView?.stopAnimating()
+        }
+    }
 }

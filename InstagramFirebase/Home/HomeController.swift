@@ -13,18 +13,13 @@ import Firebase
 
 class HomeController: UIViewController {
     
-    
-    
     //MARK:- Properties
     var posts = [Post]()
     var activityView: UIActivityIndicatorView?
     
-    
-    
     //MARK:- IBOutlets
     @IBOutlet weak var homeCollectionView: UICollectionView!
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         let name = NSNotification.Name(rawValue: "UpdateFeed")
@@ -36,30 +31,16 @@ class HomeController: UIViewController {
         homeCollectionView.refreshControl = refreshController
         let cell = UINib(nibName: "HomePostCell", bundle: nil)
         homeCollectionView.register(cell, forCellWithReuseIdentifier: "HomePostCell")
-       
-        
-        
-            
-            
-        
-        
-        
-        
     }
     
-    //MARK:IBActions
+    //MARK:-IBActions
     @IBAction func cameraPressed(_ sender: Any) {
         handelCamera()
     }
-    
-    
-    
 }
-
 
 //MARK:- Collection View DataSource Methods
 extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HomePostCellDelegate{
-   
     //HomePostCell Dealegate methods
     func didLike(for cell: HomePostCell) {
         guard let indexPath = homeCollectionView.indexPath(for:cell) else {return}
@@ -77,7 +58,7 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
             self.posts[indexPath.item] = post
             self.homeCollectionView.reloadData()
             //self.homeCollectionView.reloadItems(at: [indexPath])
-           
+            
         }
     }
     
@@ -91,7 +72,6 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
         return posts.count
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePostCell", for: indexPath) as! HomePostCell
         cell.photoImageView.image = nil
@@ -100,22 +80,14 @@ extension HomeController: UICollectionViewDataSource,UICollectionViewDelegateFlo
         return cell
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let height:CGFloat = 200 + view.frame.width
         return CGSize(width: view.frame.width, height: height)
     }
-    
-    
 }
-
-
 
 //MARK:- Private functions
 extension HomeController{
-    
-    
-    
     fileprivate func handelCamera(){
         let vc = CameraController()
         vc.modalPresentationStyle = .fullScreen
@@ -127,7 +99,6 @@ extension HomeController{
         handelRefresh()
     }
     
-    
     fileprivate func fetchAllPosts(){
         showActivityIndicator()
         fetchPosts()
@@ -135,10 +106,9 @@ extension HomeController{
     }
     
     @objc fileprivate func handelRefresh(){
-       
+        
         fetchAllPosts()
     }
-    
     
     fileprivate func fetchFollowingUserIds(){
         guard let uid = Auth.auth().currentUser?.uid else {return}
@@ -150,25 +120,20 @@ extension HomeController{
         }) { (error) in
             print(error,"error getting following users")
         }
-        
     }
     
     
     fileprivate func fetchPosts(){
         guard let uid = Auth.auth().currentUser?.uid else { return }
         Database.fetchUserWithUID(uid: uid, completion: fetchPostsWithUser(_:))
-        
-        
     }
     
     fileprivate func fetchPostsWithUser(_ user:User){
-        
         let ref = Database.database().reference().child("posts").child(user.uid)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
-           
             self.homeCollectionView.refreshControl?.endRefreshing()
             guard let dictionaries = snapshot.value as? [String:Any] else {return}
-             self.posts.removeAll()
+            self.posts.removeAll()
             self.homeCollectionView.reloadData()
             dictionaries.forEach { (key,value) in
                 guard let dictionary = value as? [String: Any] else{ return}
@@ -176,57 +141,46 @@ extension HomeController{
                 post.id = key
                 guard let uid = Auth.auth().currentUser?.uid else {return}
                 Database.database().reference().child("likes").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
-                     
+                    
                     self.hideActivityIndicator()
                     if let value = snapshot.value as? Int ,value == 1{
                         post.hasLiked = true
                     }else{
                         post.hasLiked = false
                     }
-                
-                        
-                     
                     self.posts.append(post)
                     
                     self.posts.sort { (p1, p2) -> Bool in
                         
                         return p1.creationDate!.compare(p2.creationDate!) == .orderedDescending
-                        
                     }
                     self.hideActivityIndicator()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    self.homeCollectionView.reloadData()
+                        self.homeCollectionView.reloadData()
                     }
                 }) { (error) in
-                     self.hideActivityIndicator()
+                    self.hideActivityIndicator()
                     print("failled to fetch like info for posts",error)
                 }
-                
             }
-         
-           
         }) { (err) in
             print("err",err)
-             self.hideActivityIndicator()
+            self.hideActivityIndicator()
         }
-     
     }
     
+    fileprivate func showActivityIndicator() {
+        activityView = UIActivityIndicatorView(style: .gray)
+        activityView?.center = self.view.center
+        self.view.addSubview(activityView!)
+        activityView?.startAnimating()
+    }
     
-    
-
-     fileprivate func showActivityIndicator() {
-         activityView = UIActivityIndicatorView(style: .gray)
-         activityView?.center = self.view.center
-         self.view.addSubview(activityView!)
-         activityView?.startAnimating()
-     }
-     
     fileprivate func hideActivityIndicator(){
         
-         if (activityView != nil){
-             activityView?.stopAnimating()
+        if (activityView != nil){
+            activityView?.stopAnimating()
             
-         }
-     }
+        }
+    }
 }

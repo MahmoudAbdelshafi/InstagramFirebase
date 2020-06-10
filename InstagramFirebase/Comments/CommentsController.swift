@@ -10,34 +10,23 @@ import UIKit
 import Firebase
 
 
-
-
-
 class CommentsController: UICollectionViewController,CommentInputAccessoryViewDelegate {
-   
-    
-   
-    
     
     //MARK:- Properties
-    
     private let reuseIdentifier = "Cell"
-     var post:Post?
+    var post:Post?
     var comments = [Comment]()
-  
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         fetchComments()
         navigationItem.title = "Comments"
-        
         collectionView.keyboardDismissMode = .interactive
         collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = .white
         collectionView.contentInset = UIEdgeInsets(top: 0 , left: 0, bottom: -view.safeAreaInsets.bottom  , right: 0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
-        
         // Register cell classes
         self.collectionView!.register(CommentCell.self, forCellWithReuseIdentifier: reuseIdentifier)
     }
@@ -47,15 +36,16 @@ class CommentsController: UICollectionViewController,CommentInputAccessoryViewDe
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         tabBarController?.tabBar.isHidden = true
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         tabBarController?.tabBar.isHidden = false
         continerView?.removeFromSuperview()
     }
-    
-    
     
     //Comments ContinerView
     lazy var continerView: CommentInputAccessoryView? = {
@@ -63,7 +53,7 @@ class CommentsController: UICollectionViewController,CommentInputAccessoryViewDe
         let commentInputAccessoryView = CommentInputAccessoryView(frame: frame)
         commentInputAccessoryView.delegate = self
         return commentInputAccessoryView
-  
+        
     }()
     func didSubmit(for comment: String) {
         let postID = post?.id ?? ""
@@ -76,14 +66,10 @@ class CommentsController: UICollectionViewController,CommentInputAccessoryViewDe
             print("comment successfully submitted")
             self.continerView?.clearCommentTextFiled()
         }
-       }
-    
-  
-    
+    }
     
     override var inputAccessoryView: UIView?{
         get{
-         
             return continerView
         }
     }
@@ -91,16 +77,10 @@ class CommentsController: UICollectionViewController,CommentInputAccessoryViewDe
     override var canBecomeFirstResponder: Bool{
         return true
     }
-    
-    
-   
-    
 }
 
 // MARK: UICollectionView DataSource
 extension CommentsController:UICollectionViewDelegateFlowLayout{
-
-   
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
         let dummyCell = CommentCell(frame: frame)
@@ -132,15 +112,11 @@ extension CommentsController:UICollectionViewDelegateFlowLayout{
     
 }
 
-
-
-
 //MARK:- Private Functions
 extension CommentsController {
-
     fileprivate func fetchComments(){
         guard let postId = self.post?.id else { return}
-    let ref = Database.database().reference().child("comments").child(postId)
+        let ref = Database.database().reference().child("comments").child(postId)
         ref.observe(.childAdded, with: { (snapshot) in
             guard let dictionary = snapshot.value as? [String:Any] else {return}
             guard let uid = dictionary["uid"] as? String else {return}
@@ -153,50 +129,5 @@ extension CommentsController {
         }) { (error) in
             print(error,"error fetching comments")
         }
-        
     }
-    
-    
-    
-    
 }
-
-
-
-
-
-
-
-
-
-
-// MARK: UICollectionViewDelegate
-   
-   /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-    return true
-    }
-    */
-   
-   /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-    return true
-    }
-    */
-   
-   /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-    return false
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-    return false
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */

@@ -10,7 +10,6 @@ import UIKit
 
 class CommentCell: UICollectionViewCell {
     
-    
     //MARK:- Properties
     var comment:Comment?{
         didSet{
@@ -23,19 +22,14 @@ class CommentCell: UICollectionViewCell {
             textView.attributedText = attrbuitedText
         }
     }
-
-    
     
     let textView:UITextView = {
         let textView = UITextView()
         textView.font = UIFont.systemFont(ofSize: 14)
         textView.isEditable = false
         textView.isScrollEnabled = false
-   
-        
         return textView
     }()
-    
     
     let profileImageView:CustomImageView = {
         let image = CustomImageView()
@@ -48,13 +42,11 @@ class CommentCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         addSubview(textView)
         addSubview(profileImageView)
-        
         profileImageView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop:8 , paddingLeft: 8, paddingBottom: 0, paddingRight: 0, width: 40, height: 40)
         textView.anchor(top: topAnchor, left: profileImageView.rightAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 4, paddingLeft: 4, paddingBottom: 4, paddingRight: 4, width: 0, height: 0)
-        
-     
     }
     
     required init?(coder: NSCoder) {

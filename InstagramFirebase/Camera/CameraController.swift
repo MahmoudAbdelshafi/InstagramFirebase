@@ -10,11 +10,8 @@ import UIKit
 import AVFoundation
 
 class CameraController: UIViewController,AVCapturePhotoCaptureDelegate, UIViewControllerTransitioningDelegate {
-  
-    
     //MARK:- Properties
     let output = AVCapturePhotoOutput()
-    
     let dismissButton:UIButton = {
         let button = UIButton(type: .system)
         var image = UIImage(named: "right_arrow_shadow")
@@ -30,25 +27,20 @@ class CameraController: UIViewController,AVCapturePhotoCaptureDelegate, UIViewCo
         button.addTarget(self, action: #selector(handelCapturePhoto), for: .touchUpInside)
         return button
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         transitioningDelegate = self
-           setupCaptureSession()
+        setupCaptureSession()
     }
-    
     
     override func viewDidLayoutSubviews() {
         setupButtonsConstraints()
     }
     
-    
-
     override var prefersStatusBarHidden: Bool{
         return true
     }
-    
-    
     
     let customAnimationPresenter = CustomAnimationPresentor()
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -58,18 +50,10 @@ class CameraController: UIViewController,AVCapturePhotoCaptureDelegate, UIViewCo
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return customAnimationDismisser
     }
-    
-    
-  
- 
-
 }
-
 
 //MARK:- Private Functions
 extension CameraController{
-    
-    
     @objc fileprivate func handelDismissButton(){
         dismiss(animated: true, completion: nil)
     }
@@ -77,26 +61,16 @@ extension CameraController{
     fileprivate func setupButtonsConstraints(){
         view.addSubview(dismissButton)
         view.addSubview(capturePhotoButton)
-         
-        
-        
         capturePhotoButton.anchor(top: nil, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 30, paddingRight: 0, width: 80, height: 80)
         capturePhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-       
-        
         dismissButton.anchor(top: view.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, paddingTop: 40, paddingLeft: 0, paddingBottom: 0, paddingRight: 20 , width: 40, height: 40)
-        
     }
-    
-    
-    
     
     @objc fileprivate func handelCapturePhoto(){
         let settings = AVCapturePhotoSettings()
         settings.previewPhotoFormat = settings.embeddedThumbnailPhotoFormat
         output.capturePhoto(with: settings, delegate: self)
-       }
-    
+    }
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         let imageDate = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer!, previewPhotoSampleBuffer: previewPhotoSampleBuffer)
@@ -117,14 +91,14 @@ extension CameraController{
         do{
             let input = try AVCaptureDeviceInput(device:captureDevice)
             if captureSession.canAddInput(input){
-             captureSession.addInput(input)
+                captureSession.addInput(input)
             }
         }catch let err{
             print("Camera Error",err)
         }
-       // 2. Set up Output
+        // 2. Set up Output
         if captureSession.canAddOutput(output){
-        captureSession.addOutput(output)
+            captureSession.addOutput(output)
         }
         // 3. Set up output Perview
         let perviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)

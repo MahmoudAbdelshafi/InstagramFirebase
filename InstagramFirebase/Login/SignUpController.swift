@@ -11,7 +11,6 @@ import Firebase
 
 class SignUpController: UIViewController, UINavigationControllerDelegate {
     
-    
     //MARK:-Properties
     var activityView: UIActivityIndicatorView?
     
@@ -23,21 +22,14 @@ class SignUpController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet weak var signInButton: UIButton!
     @IBOutlet weak var plusPhotoButton: UIButton!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupUI()
         hideKeyboardWhenTappedAround()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(sender:)), name: UIResponder.keyboardWillShowNotification, object: nil);
-
-             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(sender:)), name: UIResponder.keyboardWillHideNotification, object: nil);
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(sender:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(sender:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    
-    
-    
-    
     
     //MARK:- IBActions
     @IBAction func TextFields(_ sender: Any) {
@@ -54,12 +46,8 @@ class SignUpController: UIViewController, UINavigationControllerDelegate {
     }
 }
 
-
-
-
 //MARK:- Peivate functions
 extension SignUpController{
-   
     //Handel SignUp
     fileprivate func handelSignUp(){
         guard let email = emailTextFiled.text, email.count > 0 else {return}
@@ -81,7 +69,7 @@ extension SignUpController{
             let filename = NSUUID().uuidString
             Storage.storage().reference().child("profile_images").child(filename).putData(uploadData, metadata: nil) { (metadata, err) in
                 if let error = err{
-                  self.hideActivityIndicator()
+                    self.hideActivityIndicator()
                     self.signUpButton.isEnabled = true
                     print("Error upload profile image" , error)
                     return
@@ -103,7 +91,7 @@ extension SignUpController{
                         }
                         print("saved to database")
                         self.signUpButton.isEnabled = true
-                       self.hideActivityIndicator()
+                        self.hideActivityIndicator()
                         
                         self.dismiss(animated: true, completion: nil)
                     }
@@ -111,11 +99,6 @@ extension SignUpController{
             }
         }
     }
-    
-    
-    
-    
-    
     
     //handel changeEdit Text fields
     fileprivate func handelTextInputChange(){
@@ -137,74 +120,58 @@ extension SignUpController{
         plusPhotoButton.imageView?.contentMode = .scaleAspectFit
         plusPhotoButton.layer.masksToBounds = true
         let attributedText = NSMutableAttributedString(string: "Already have an account?  ", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),NSAttributedString.Key.foregroundColor : UIColor.lightGray])
-               attributedText.append(NSMutableAttributedString(string: "Sign In.", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14),NSAttributedString.Key.foregroundColor : UIColor.rgb(red: 17, green: 154, blue: 237),]))
+        attributedText.append(NSMutableAttributedString(string: "Sign In.", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14),NSAttributedString.Key.foregroundColor : UIColor.rgb(red: 17, green: 154, blue: 237),]))
         signInButton.setAttributedTitle(attributedText, for: .normal)
     }
 }
 
-
 //MARK:- Picker view Deleget
 extension SignUpController: UIImagePickerControllerDelegate{
-    
     //Handel PlusPhotoButton
     fileprivate func PlusPhotoButton(){
         showActivityIndicator()
         let imagePickerController = UIImagePickerController()
- 
         imagePickerController.delegate = self
         imagePickerController.allowsEditing = true
-        
         present(imagePickerController, animated: true, completion: {self.hideActivityIndicator()})
-       
     }
-    
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let originalImage = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerOriginalImage")] as? UIImage{
             print(originalImage.size)
             plusPhotoButton.setImage(originalImage, for: .normal)
-          
         }
         else if let editedImage = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage{
             plusPhotoButton.setImage(editedImage, for: .normal)
-           
         }
-        
         dismiss(animated: true, completion: nil)
         setupUI()
         handelTextInputChange()
     }
     
-    
     fileprivate func showActivityIndicator() {
         activityView = UIActivityIndicatorView(style: .gray)
         activityView?.center = self.view.center
-        
         self.view.addSubview(activityView!)
         activityView?.startAnimating()
     }
     
-   fileprivate func hideActivityIndicator(){
+    fileprivate func hideActivityIndicator(){
         if (activityView != nil){
             activityView?.stopAnimating()
         }
     }
- 
-    
     
     //MARK: Moving Up the View When keyboard is active
     @objc func keyboardWillShow(sender: NSNotification) {
-          if self.view.frame.height < 667{
+        if self.view.frame.height < 667{
             self.view.frame.origin.y = -180
-          }else{
+        }else{
             self.view.frame.origin.y = -80
         }
-           
-          
-      }
-
-      @objc func keyboardWillHide(sender: NSNotification) {
-           self.view.frame.origin.y = 0
-      }
+    }
     
+    @objc func keyboardWillHide(sender: NSNotification) {
+        self.view.frame.origin.y = 0
+    }
 }

@@ -10,8 +10,6 @@ import UIKit
 import Firebase
 
 class UserSearchController: UIViewController{
-    
-    
     //MARK:- Properties
     let cellId = "searchCell"
     private var users = [User]()
@@ -26,27 +24,21 @@ class UserSearchController: UIViewController{
     //MARK:- IBOutlets
     @IBOutlet weak var searchCollectionView: UICollectionView!
     
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupNavController()
         fetchUsers()
         hideKeyboardWhenTappedAround()
         searchCollectionView.keyboardDismissMode = .onDrag
-    
-        
     }
-   
+    
     //MARK:- ViewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        
         searchBar.isHidden = false
     }
-    
-    
-    
 }
 
 //MARK:- collectionView DataSource
@@ -104,12 +96,9 @@ extension UserSearchController{
         }) { (error) in
             print(error)
         }
-        
     }
-    
-    
-    
 }
+
 //MARK:- UISearchBar Delegate
 extension UserSearchController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

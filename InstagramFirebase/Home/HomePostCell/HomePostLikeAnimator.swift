@@ -18,7 +18,6 @@ class HomePostLikeAnimator{
         self.layoutConstraint = layoutConstraint
     }
     
-    
     func animate(completion: @escaping () ->Void){
             layoutConstraint.constant = 100
             UIView.animate(withDuration:0.7,
@@ -34,11 +33,5 @@ class HomePostLikeAnimator{
                     completion()
                 }
             }
-            
-            
-          
-        
-        
-        
     }
 }

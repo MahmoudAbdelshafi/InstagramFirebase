@@ -9,11 +9,7 @@
 import UIKit
 
 
-
-
 class PhotoSelectorHeader: UICollectionViewCell {
-   
-    
    
     let HeaderPhotoImage:UIImageView = {
         let iv = UIImageView()
@@ -28,7 +24,6 @@ class PhotoSelectorHeader: UICollectionViewCell {
         
            addSubview(HeaderPhotoImage)
            HeaderPhotoImage.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-           
        }
     
     

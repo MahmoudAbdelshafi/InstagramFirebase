@@ -32,15 +32,7 @@ class HomePostCell: UICollectionViewCell {
         }
     }
     
-    
-    
-   
-    
-    
-    
-    
-    
-    
+    //MARK:- IBOutlets
     @IBOutlet weak var photoImageView: CustomImageView!
     @IBOutlet weak var userPhotoImageView: CustomImageView!
     @IBOutlet weak var likeImageView: UIImageView!
@@ -53,18 +45,13 @@ class HomePostCell: UICollectionViewCell {
     @IBOutlet weak var sendMessageButton: UIButton!
     @IBOutlet weak var captionLabel: UILabel!
     
-    
-    
-    
     //MARK: UITap Recognizer
-       lazy var homePostLikeAnimator = HomePostLikeAnimator(container: self.contentView, layoutConstraint: self.likeImageViewWidthConstraint)
-       lazy var doubleTapRecognizer:UITapGestureRecognizer = {
-           let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didDoubleTap))
-           tapRecognizer.numberOfTapsRequired = 2
-           return tapRecognizer
-       }()
-    
-    
+    lazy var homePostLikeAnimator = HomePostLikeAnimator(container: self.contentView, layoutConstraint: self.likeImageViewWidthConstraint)
+    lazy var doubleTapRecognizer:UITapGestureRecognizer = {
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didDoubleTap))
+        tapRecognizer.numberOfTapsRequired = 2
+        return tapRecognizer
+    }()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -87,19 +74,19 @@ extension HomePostCell{
         
         let attributedText = NSMutableAttributedString(string: post.user.username, attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
         attributedText.append(NSMutableAttributedString(string: "  \(post.caption)", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),NSAttributedString.Key.foregroundColor : UIColor.black
-               ]))
-               
-               attributedText.append(NSMutableAttributedString(string: "\n\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 4)]))
+        ]))
+        
+        attributedText.append(NSMutableAttributedString(string: "\n\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 4)]))
         let timeAgoDisplay = post.creationDate?.timeAgoDisplay() ?? ""
         attributedText.append(NSMutableAttributedString(string: timeAgoDisplay, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),NSAttributedString.Key.foregroundColor : UIColor.gray]))
-               
-               captionLabel.attributedText = attributedText
+        
+        captionLabel.attributedText = attributedText
     }
     
     fileprivate func setupUI(){
         photoImageView.clipsToBounds = true
         userPhotoImageView.layer.cornerRadius = 40 / 2
-       
+        
     }
     
     fileprivate func handelLike(){
@@ -111,16 +98,16 @@ extension HomePostCell{
         guard let post = self.post else {return}
         delegate?.didTapComment(post: post)
         
-       }
+    }
     
     //Handel recognizer
     @objc func didDoubleTap(){
-         homePostLikeAnimator.animate {
+        homePostLikeAnimator.animate {
             let likedImage = UIImage(named: "likephoto_selected")
             if self.likeButton.imageView?.image != likedImage{
-            self.handelLike()
+                self.handelLike()
             }
-         }
-         
-     }
+        }
+        
+    }
 }

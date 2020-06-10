@@ -9,7 +9,6 @@
 import UIKit
 
 var imageCache = [String:UIImage]()
-
 class CustomImageView: UIImageView {
     func loadImage(urlString:String){
         self.image = nil

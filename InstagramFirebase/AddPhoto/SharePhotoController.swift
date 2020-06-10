@@ -11,15 +11,13 @@ import Firebase
 
 class SharePhotoController:UIViewController{
     
-    
     //MARK:- Properties
     static var selectedImage: UIImage?
     let image = SharePhotoController.selectedImage
     var activityView: UIActivityIndicatorView?
     
-    
-    
     override func viewDidLoad() {
+        
         view.backgroundColor = UIColor.rgb(red: 240, green: 240, blue: 240)
         setupNavigationBarButtons()
         setupImageAndTextViews()
@@ -49,10 +47,8 @@ class SharePhotoController:UIViewController{
     }()
 }
 
-
 //MARK:- Private Functions
 extension SharePhotoController{
-    
     fileprivate func setupImageAndTextViews(){
         let continarView = UIView()
         continarView.backgroundColor = .white
@@ -64,7 +60,6 @@ extension SharePhotoController{
         textView.anchor(top: continarView.topAnchor, left: imageView.rightAnchor, bottom: continarView.bottomAnchor, right: continarView.rightAnchor, paddingTop: 8, paddingLeft: 8, paddingBottom: 8, paddingRight: 8, width: 0, height: 0)
         
     }
-    
     
     fileprivate func setupNavigationBarButtons(){
         navigationController?.navigationBar.tintColor = .black
@@ -97,7 +92,6 @@ extension SharePhotoController{
                 let imageURL = url?.absoluteString
                 self.saveToDatabaseWithImageUrl(imageURl: imageURL!)
             }
-            
         }
     }
     
@@ -112,10 +106,10 @@ extension SharePhotoController{
         ref.updateChildValues(values) { (error, ref) in
             if let error = error{
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
-                 self.hideActivityIndicator()
+                self.hideActivityIndicator()
                 print("Can't save to database",error)
             }
-             self.hideActivityIndicator()
+            self.hideActivityIndicator()
             self.dismiss(animated: true, completion: nil)
             print("post saved to Database")
             let name = NSNotification.Name(rawValue: "UpdateFeed")
@@ -123,16 +117,15 @@ extension SharePhotoController{
         }
     }
     fileprivate func showActivityIndicator() {
-         activityView = UIActivityIndicatorView(style: .gray)
-         activityView?.center = self.view.center
-         self.view.addSubview(activityView!)
-         activityView?.startAnimating()
-     }
-     
+        activityView = UIActivityIndicatorView(style: .gray)
+        activityView?.center = self.view.center
+        self.view.addSubview(activityView!)
+        activityView?.startAnimating()
+    }
+    
     fileprivate func hideActivityIndicator(){
-         if (activityView != nil){
-             activityView?.stopAnimating()
-         }
-     }
-
+        if (activityView != nil){
+            activityView?.stopAnimating()
+        }
+    }
 }

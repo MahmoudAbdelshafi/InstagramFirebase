@@ -9,12 +9,11 @@
 import UIKit
 
 class CustomAnimationPresentor: NSObject,UIViewControllerAnimatedTransitioning{
-      func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-          return 0.5
-      }
-      
-      
-      func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return 0.5
+    }
+    
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let continerView = transitionContext.containerView
         guard let toView = transitionContext.view(forKey: .to) else {return}
         guard let fromView = transitionContext.view(forKey: .from) else {return}
@@ -28,8 +27,5 @@ class CustomAnimationPresentor: NSObject,UIViewControllerAnimatedTransitioning{
         }) { (completed) in
             transitionContext.completeTransition(true)
         }
-        
-      
-  }
-
+    }
 }

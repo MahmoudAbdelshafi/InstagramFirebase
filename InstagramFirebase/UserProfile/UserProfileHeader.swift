@@ -31,10 +31,8 @@ class UserProfileHeader: UICollectionReusableView {
             userImage.loadImage(urlString: imageUrl)
             userLabel.text = user?.username
             setupEditProfileButton()
-
         }
     }
-    
     
     //MARK:- IBOutlets
     @IBOutlet weak var userImage: CustomImageView!
@@ -47,20 +45,19 @@ class UserProfileHeader: UICollectionReusableView {
     @IBOutlet weak var listButton: UIButton!
     @IBOutlet weak var bookMarkButton: UIButton!
     
-   
-    override func awakeFromNib() {
-        setupUI()
-        
-    }
     
+    override func awakeFromNib() {
+        
+        setupUI()
+    }
     
     //MARK:- IBActions
     @IBAction func editProfilePressed(_ sender: Any) {
         guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else {return}
         guard let userId = user?.uid else {return}
         if currentLoggedInUserId != userId{
-        handelEditProfileOrFollow()
-    }
+            handelEditProfileOrFollow()
+        }
     }
     @IBAction func gridPressed(_ sender: Any) {
         handelChangeToGrid()
@@ -73,14 +70,8 @@ class UserProfileHeader: UICollectionReusableView {
     }
 }
 
-
-
-
-
-
 //MARK:- Private Functions
 extension UserProfileHeader{
-    
     fileprivate func handelChangeToListView(){
         print("list")
         listButton.tintColor = #colorLiteral(red: 0, green: 0.4705882353, blue: 0.6862745098, alpha: 1)
@@ -96,16 +87,11 @@ extension UserProfileHeader{
         delegate?.didChangeToGridView()
     }
     
-    
     fileprivate func funchandelChangeToBookmark(){
         listButton.tintColor = .lightGray
         gridButton.tintColor = .lightGray
         bookMarkButton.tintColor = #colorLiteral(red: 0, green: 0.4705882353, blue: 0.6862745098, alpha: 1)
     }
-    
-    
- 
-    
     
     fileprivate func setupEditProfileButton(){
         guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else {return}
@@ -115,7 +101,7 @@ extension UserProfileHeader{
                 if let isFollowing = snapshot.value as? Int, isFollowing == 1 {
                     self.followStyle()
                 }else{
-                    self.unFollowStyle()
+                    self.unfollowStyle()
                 }
                 
             }) { (error) in
@@ -127,11 +113,6 @@ extension UserProfileHeader{
             editProfileButton.backgroundColor = .clear
         }
     }
-    
-    
-    
-    
-  
     
     fileprivate func handelEditProfileOrFollow(){
         guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else {return}
@@ -157,14 +138,13 @@ extension UserProfileHeader{
                     return
                 }
                 print("Unfollowed")
-                self.unFollowStyle()
+                self.unfollowStyle()
             }
         }
         
     }
     
-    
-    fileprivate func unFollowStyle(){
+    fileprivate func unfollowStyle(){
         self.editProfileButton.setTitle("Follow", for: .normal)
         self.editProfileButton.backgroundColor = #colorLiteral(red: 0, green: 0.4705882353, blue: 0.6862745098, alpha: 1)
         self.editProfileButton.setTitleColor(.white, for: .normal)
@@ -175,7 +155,6 @@ extension UserProfileHeader{
         self.editProfileButton.backgroundColor = .clear
         self.editProfileButton.setTitleColor(.black, for: .normal)
     }
-    
     
     fileprivate func setupUI(){
         userImage.layer.cornerRadius = 80/2

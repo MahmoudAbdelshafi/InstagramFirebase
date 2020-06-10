@@ -14,11 +14,8 @@ protocol CommentInputAccessoryViewDelegate {
     
 }
 
-
 class CommentInputAccessoryView: UIView{
-    
     var delegate:CommentInputAccessoryViewDelegate?
-    
     let submitButton :UIButton = {
         let sb = UIButton(type: .system)
         sb.setTitle("Post", for: .normal)
@@ -28,7 +25,6 @@ class CommentInputAccessoryView: UIView{
         return sb
     }()
     
-    
     let commentTextView:CommentInputTextView = {
         let tv = CommentInputTextView ()
         tv.isScrollEnabled = false
@@ -36,18 +32,15 @@ class CommentInputAccessoryView: UIView{
         return tv
     }()
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         backgroundColor = .white
-        
         autoresizingMask = .flexibleHeight
         addSubview(submitButton)
         addSubview(commentTextView)
         submitButton.anchor(top: topAnchor, left: nil, bottom: nil, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 12, width: 65, height: 50 )
         commentTextView.anchor(top: topAnchor, left: leftAnchor, bottom: safeAreaLayoutGuide.bottomAnchor , right: submitButton.leftAnchor, paddingTop: 8, paddingLeft: 8, paddingBottom: 8, paddingRight: 8, width: 0, height: 0)
-        
         lineSeparatorView()
     }
     
@@ -65,7 +58,7 @@ class CommentInputAccessoryView: UIView{
             return
         }
         delegate?.didSubmit(for: commentText)
-      
+        
     }
     func clearCommentTextFiled(){
         commentTextView.text = nil
@@ -76,17 +69,10 @@ class CommentInputAccessoryView: UIView{
 
 //MARK: Private Functions
 extension CommentInputAccessoryView{
-    
-    
-    
     fileprivate func lineSeparatorView(){
         let lineSeparatorView = UIView()
         lineSeparatorView.backgroundColor = UIColor.rgb(red: 230, green: 230, blue: 230 )
         addSubview(lineSeparatorView)
         lineSeparatorView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0.5)
-        
-        
     }
-    
-    
 }

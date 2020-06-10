@@ -10,7 +10,6 @@ import UIKit
 
 class UserSearchCell: UICollectionViewCell {
     
-    
     //MARK:- Properties
     var user:User?{
         didSet{
@@ -19,7 +18,6 @@ class UserSearchCell: UICollectionViewCell {
             userNameLabel.text = user?.username
         }
     }
-    
     
     //MARK:- IBOutlets
     @IBOutlet weak var profileImageView: CustomImageView!

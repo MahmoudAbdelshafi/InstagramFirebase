@@ -10,8 +10,6 @@ import UIKit
 import Photos
 
 class PerviewPhotoContinaerView: UIView {
-    
-    
     let saveButton:UIButton = {
         let button = UIButton(type: .system)
         let image = UIImage(named: "save_shadow")
@@ -37,17 +35,14 @@ class PerviewPhotoContinaerView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame:frame)
+        
         setupConstraints()
-        
-        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
-
 
 //MARK:- Private functions
 extension PerviewPhotoContinaerView{
@@ -70,8 +65,6 @@ extension PerviewPhotoContinaerView{
         }
     }
     
-    
-    
     fileprivate func setupConstraints(){
         addSubview(perviewImageView)
         addSubview(cancelButton)
@@ -80,9 +73,6 @@ extension PerviewPhotoContinaerView{
         perviewImageView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         cancelButton.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 12, paddingBottom: 0, paddingRight: 0, width:50, height: 50)
     }
-    
-    
-    
     
     fileprivate func viewSavedMessage(){
         DispatchQueue.main.async {

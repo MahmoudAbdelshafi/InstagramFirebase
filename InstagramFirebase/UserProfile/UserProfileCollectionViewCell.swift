@@ -13,19 +13,13 @@ class UserProfileCollectionViewCell: UICollectionViewCell {
         didSet{
             guard let imageUrl = post?.imageUrl else {return}
           userImage.loadImage(urlString: imageUrl)
-      
         }
     }
     
     override func awakeFromNib() {
-        
-
-       }
+    }
        
-    
+    //MARK:-IBOutlets
     @IBOutlet weak var userImage: CustomImageView!
-    
-   
-    
 }
 
