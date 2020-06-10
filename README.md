@@ -35,7 +35,7 @@ An iOS clone of instagram built using Swift 5, and Firebase.
 
 ## Meta
 
-Mahmoud Abdelshafi. – mahmoudabdelshafi4@gmail.com
+Mahmoud Abdelshafi – mahmoudabdelshafi4@gmail.com
 
 
 [swift-image]:https://img.shields.io/badge/swift-5.0-orange.svg?style=flat
